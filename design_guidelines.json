@@ -1,0 +1,65 @@
+{
+  "project_info": {
+    "title": "ATELIER — Tasarım & Marka Stüdyosu",
+    "description": "Modern, editoryal ve minimalist tasarım ve marka stüdyosu portfolyo web sitesi",
+    "context": "Marketing / Portfolio",
+    "emotional_tone": "Editorial, Timeless, Luxury, Sophisticated, Minimalist"
+  },
+  "typography": {
+    "headings": {
+      "family": "Playfair Display, serif",
+      "weights": ["400", "500", "600", "700"],
+      "classes": "font-serif tracking-tight"
+    },
+    "body": {
+      "family": "Plus Jakarta Sans, sans-serif",
+      "weights": ["300", "400", "500", "600"],
+      "classes": "font-sans leading-relaxed"
+    }
+  },
+  "colors": {
+    "background": "#FBFBFB",
+    "text_primary": "#1A1A1A",
+    "text_muted": "#666666",
+    "border": "#E5E5E5",
+    "surface": "#FFFFFF",
+    "accent": "#1A1A1A"
+  },
+  "image_urls": [
+    {
+      "category": "portfolio_item_1",
+      "url": "https://images.unsplash.com/photo-1760804876161-ba0337e998fe?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDk1NzZ8MHwxfHNlYXJjaHwxfHxtaW5pbWFsaXN0JTIwYnJhbmRpbmclMjBtb2NrdXAlMjBlZGl0b3JpYWwlMjBwb3J0Zm9saW98ZW58MHx8fHwxNzkxNDQ3NTg1fDA&ixlib=rb-4.1.0&q=85",
+      "description": "Minimalist box with gold trim & branding"
+    },
+    {
+      "category": "portfolio_item_2",
+      "url": "https://images.unsplash.com/photo-1775510984733-8748e90a985e?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDk1NzZ8MHwxfHNlYXJjaHwyfHxtaW5pbWFsaXN0JTIwYnJhbmRpbmclMjBtb2NrdXAlMjBlZGl0b3JpYWwlMjBwb3J0Zm9saW98ZW58MHx8fHwxNzkxNDQ3NTg1fDA&ixlib=rb-4.1.0&q=85",
+      "description": "Storefront architectural typography branding"
+    },
+    {
+      "category": "portfolio_item_3",
+      "url": "https://images.unsplash.com/photo-1782857690704-c4341b240487?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDk1NzZ8MHwxfHNlYXJjaHw0fHxtaW5pbWFsaXN0JTIwYnJhbmRpbmclMjBtb2NrdXAlMjBlZGl0b3JpYWwlMjBwb3J0Zm9saW98ZW58MHx8fHwxNzkxNDQ3NTg1fDA&ixlib=rb-4.1.0&q=85",
+      "description": "Dark luxury business card aesthetic"
+    },
+    {
+      "category": "portfolio_item_4",
+      "url": "https://images.unsplash.com/photo-1790345835845-bda0548978b2?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1ODR8MHwxfHNlYXJjaHw0fHxlZGl0b3JpYWwlMjBkZXNpZ24lMjBtYWdhemluZSUyMGxheW91dCUyMGFyY2hpdGVjdHVyZXxlbnwwfHx8fDE3OTE0NDc1ODd8MA&ixlib=rb-4.1.0&q=85",
+      "description": "Editorial magazine layout & typography"
+    }
+  ],
+  "sections": [
+    "Header (Fixed / Minimal with navigation & Behance link)",
+    "Hero (Editorial typography, strong statement & subtitle)",
+    "Portfolio Grid (2-column modern asymmetrical showcase with hover depth & Behance links)",
+    "Social Proof / Behance Ribbon (Curated case studies banner & CTA)",
+    "About Studio (Philosophy, disciplines, and editorial aesthetic)",
+    "Contact & Footer (Project inquiry form, email, location, and social links)"
+  ],
+  "guidelines": [
+    "Use Generous spacing (p-12, py-20, etc.)",
+    "Maintain strict editorial contrast: #1A1A1A on #FBFBFB",
+    "All interactive elements must include data-testid",
+    "Use Playfair Display for headings and Plus Jakarta Sans for body",
+    "Never use pure black or full transparent header without blur/scrim"
+  ]
+}
