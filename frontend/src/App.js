@@ -8,10 +8,9 @@ import { ArrowUpRight, Menu, X, MoveDown, Instagram, Sparkles } from "lucide-rea
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
 const projects = [
-  { number: "01", name: "AURA", type: "Brand Identity", disciplines: "Logo, Kurumsal Kimlik, Kartvizit", image: "https://images.unsplash.com/photo-1760804876161-ba0337e998fe?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDk1NzZ8MHwxfHNlYXJjaHwxfHxtaW5pbWFsaXN0JTIwYnJhbmRpbmclMjBtb2NrdXAlMjBlZGl0b3JpYWwlMjBwb3J0Zm9saW98ZW58MHx8fHwxNzkxNDQ3NTg1fDA&ixlib=rb-4.1.0&q=85", span: "wide" },
-  { number: "02", name: "NORTH / 01", type: "Visual Language", disciplines: "Art Direction, Packaging, Digital", image: "https://images.unsplash.com/photo-1775510984733-8748e90a985e?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDk1NzZ8MHwxfHNlYXJjaHwyfHxtaW5pbWFsaXN0JTIwYnJhbmRpbmclMjBtb2NrdXAlMjBlZGl0b3JpYWwlMjBwb3J0Zm9saW98ZW58MHx8fHwxNzkxNDQ3NTg1fDA&ixlib=rb-4.1.0&q=85", span: "tall" },
-  { number: "03", name: "NOIRÉ", type: "Brand Identity", disciplines: "Logo, Print, Direction", image: "https://images.unsplash.com/photo-1782857690704-c4341b240487?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDk1NzZ8MHwxfHNlYXJjaHw0fHxtaW5pbWFsaXN0JTIwYnJhbmRpbmclMjBtb2NrdXAlMjBlZGl0b3JpYWwlMjBwb3J0Zm9saW98ZW58MHx8fHwxNzkxNDQ3NTg1fDA&ixlib=rb-4.1.0&q=85", span: "tall" },
-  { number: "04", name: "FORMA", type: "Editorial System", disciplines: "Typography, Editorial, Digital", image: "https://images.unsplash.com/photo-1790345835845-bda0548978b2?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1ODR8MHwxfHNlYXJjaHw0fHxlZGl0b3JpYWwlMjBkZXNpZ24lMjBtYWdhemluZSUyMGxheW91dCUyMGFyY2hpdGVjdHVyZXxlbnwwfHx8fDE3OTE0NDc1ODd8MA&ixlib=rb-4.1.0&q=85", span: "wide" },
+  { number: "01", name: "AURA", type: "Brand Identity", disciplines: "Logo, Kurumsal Kimlik, Kartvizit", image: "https://images.unsplash.com/photo-1760804876161-ba0337e998fe?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDk1NzZ8MHwxfHNlYXJjaHwxfHxtaW5pbWFsaXN0JTIwYnJhbmRpbmclMjBtb2NrdXAlMjBlZGl0b3JpYWwlMjBwb3J0Zm9saW98ZW58MHx8fHwxNzkxNDQ3NTg1fDA&ixlib=rb-4.1.0&q=85", span: "a" },
+  { number: "02", name: "NORTH / 01", type: "Visual Language", disciplines: "Art Direction, Packaging, Digital", image: "https://images.unsplash.com/photo-1775510984733-8748e90a985e?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDk1NzZ8MHwxfHNlYXJjaHwyfHxtaW5pbWFsaXN0JTIwYnJhbmRpbmclMjBtb2NrdXAlMjBlZGl0b3JpYWwlMjBwb3J0Zm9saW98ZW58MHx8fHwxNzkxNDQ3NTg1fDA&ixlib=rb-4.1.0&q=85", span: "b" },
+  { number: "03", name: "NOIRÉ", type: "Brand Identity", disciplines: "Logo, Print, Direction", image: "https://images.unsplash.com/photo-1782857690704-c4341b240487?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDk1NzZ8MHwxfHNlYXJjaHw0fHxtaW5pbWFsaXN0JTIwYnJhbmRpbmclMjBtb2NrdXAlMjBlZGl0b3JpYWwlMjBwb3J0Zm9saW98ZW58MHx8fHwxNzkxNDQ3NTg1fDA&ixlib=rb-4.1.0&q=85", span: "c" },
 ];
 
 const services = [
@@ -68,7 +67,7 @@ function App() {
   const heroRef = useRef(null);
   const reduceMotion = useReducedMotion();
   const { scrollYProgress } = useScroll({ target: heroRef, offset: ["start start", "end start"] });
-  const gridY = useTransform(scrollYProgress, [0, 1], [0, reduceMotion ? 0 : -70]);
+  const gridY = useTransform(scrollYProgress, [0, 1], [0, reduceMotion ? 0 : -46]);
 
   useEffect(() => {
     if (reduceMotion) return undefined;
@@ -81,7 +80,7 @@ function App() {
   }, [reduceMotion]);
 
   useEffect(() => {
-    const timer = setTimeout(() => setIntro(false), 950);
+    const timer = setTimeout(() => setIntro(false), 850);
     return () => clearTimeout(timer);
   }, []);
 
@@ -115,7 +114,7 @@ function App() {
     <main className="site-shell" data-testid="akgvision-site">
       <AnimatePresence>
         {intro && (
-          <motion.div className="intro-veil" exit={{ y: "-100%" }} transition={{ duration: 0.72, ease }} data-testid="intro-veil">
+          <motion.div className="intro-veil" exit={{ y: "-100%" }} transition={{ duration: 0.66, ease }} data-testid="intro-veil">
             <LogoMark />
             <span>AKGVISION</span>
           </motion.div>
@@ -145,7 +144,7 @@ function App() {
         <h1 data-testid="hero-title">
           {heroLines.map((line, index) => (
             <span className="mask-line" key={line}>
-              <motion.span initial={{ y: "112%" }} animate={{ y: intro ? "112%" : "0%" }} transition={{ duration: 0.9, delay: 0.12 + index * 0.11, ease }}>
+              <motion.span initial={{ y: "112%" }} animate={{ y: intro ? "112%" : "0%" }} transition={{ duration: 0.82, delay: 0.1 + index * 0.09, ease }}>
                 {line}
               </motion.span>
             </span>
@@ -153,7 +152,7 @@ function App() {
         </h1>
         <div className="hero-bottom">
           <motion.p variants={reveal} initial="hidden" animate={intro ? "hidden" : "visible"} custom={4} data-testid="hero-copy">AKGVISION; bilişim altyapıları, dijital çözümler ve zamansız kurumsal kimlik vizyonunu tek merkezde buluşturarak markaları geleceğe taşır.</motion.p>
-          <motion.button onClick={() => scrollTo("projects")} className="circle-arrow" aria-label="Projeleri keşfet" data-testid="hero-projects-button" whileHover={{ y: 5 }} whileTap={{ scale: 0.94 }}><MoveDown size={19} /></motion.button>
+          <motion.button onClick={() => scrollTo("projects")} className="circle-arrow" aria-label="Projeleri keşfet" data-testid="hero-projects-button" whileHover={{ y: 4 }} whileTap={{ scale: 0.94 }}><MoveDown size={17} /></motion.button>
         </div>
       </section>
 
@@ -240,10 +239,10 @@ function App() {
       </section>
 
       <footer className="site-footer" data-testid="site-footer">
-        <div className="footer-brand"><LogoMark /><span>AKGVISION<small>DİJİTAL ÇÖZÜMLER & BİLİŞİM</small></span></div>
+        <div className="footer-brand footer-mini"><LogoMark /><span>akgvision</span></div>
         <div className="footer-contact"><span>İstanbul, Türkiye</span><a href="mailto:hello@akgvision.com" data-testid="footer-email-link">hello@akgvision.com</a></div>
         <div className="footer-social"><a href="https://www.behance.net" target="_blank" rel="noreferrer" data-testid="footer-behance-link">Behance <ArrowUpRight size={14} /></a><a href="https://instagram.com" target="_blank" rel="noreferrer" data-testid="footer-instagram-link">Instagram <Instagram size={14} /></a></div>
-        <span className="copyright">AKGVISION © 2026 — Dijital Çözümler & Bilişim</span>
+        <span className="copyright">akgvision © 2026</span>
       </footer>
     </main>
   );

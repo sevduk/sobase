@@ -30,6 +30,8 @@ Modern, editoryal ve minimalist bir stüdyo portfolyosu olarak başlayan ürün,
 - Bu oturum: Mobil hero'daki CTA çakışması düzeltildi; 375/768/1366 genişliklerde yatay taşma olmadığı tekrar kontrol edildi.
 - Bu oturum: İstenen yapısal sadeleştirme uygulandı; marquee/ticker kaldırıldı, hero'daki dairesel gradyan söndürüldü, ekstra vitrin katmanı temizlendi ve ana akış amblem grid'i + kapak fotoğraflı projeler + hizmetler + iletişim olarak netleştirildi.
 - Bu oturum: Palet siyah/beyaz eksene alındı; zemin #FAFAFA, metin #111111, vurgular #4089bc mavi ve #c8d440 zest olarak güncellendi. Hero başlığı tek renk, dik ve outline hilesi olmadan bırakıldı.
+- Bu oturum: Görsel hiyerarşi sıkılaştırıldı; hero başlığı ~%50 küçültüldü (1366px'te 65.6px), hero yüksekliği 448px'e indirildi ve ilk ekranda amblem vitrini görünür hale getirildi.
+- Bu oturum: Amblem grid'i PNG-uyumlu, daha küçük ve hafif çerçeveli 5'li kompakt yapıya çevrildi; projeler tek satırda 3 kart ve asimetrik oranlarla yeniden kuruldu, footer alanı lowercase "akgvision" ile daraltıldı.
 
 ## Verification Notes
 - Backend: `GET /api/` 200; `POST /api/contact` geçerli veriyle 200/success; boş isim + kısa mesajla 422 doğrulandı.
