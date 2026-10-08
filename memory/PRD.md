@@ -28,6 +28,8 @@ Modern, editoryal ve minimalist bir stüdyo portfolyosu olarak başlayan ürün,
 - 2026-07: Mobil grid dengesi, yatay taşma kontrolleri ve backend Pydantic doğrulaması güçlendirildi.
 - Bu oturum: AKGVISION rebrand doğrulandı; arayüz ödül odaklı "technical editorial" yöne yükseltildi. Kinetik hero açılışı, intro veil, yavaş editoryal marquee, özgün SVG logo/favicon, spotlight'lı ve clip-path'li proje kartları, hizmet hover mikro etkileşimleri, Lenis momentum scroll ve framer-motion section reveal eklendi.
 - Bu oturum: Mobil hero'daki CTA çakışması düzeltildi; 375/768/1366 genişliklerde yatay taşma olmadığı tekrar kontrol edildi.
+- Bu oturum: İstenen yapısal sadeleştirme uygulandı; marquee/ticker kaldırıldı, hero'daki dairesel gradyan söndürüldü, ekstra vitrin katmanı temizlendi ve ana akış amblem grid'i + kapak fotoğraflı projeler + hizmetler + iletişim olarak netleştirildi.
+- Bu oturum: Palet siyah/beyaz eksene alındı; zemin #FAFAFA, metin #111111, vurgular #4089bc mavi ve #c8d440 zest olarak güncellendi. Hero başlığı tek renk, dik ve outline hilesi olmadan bırakıldı.
 
 ## Verification Notes
 - Backend: `GET /api/` 200; `POST /api/contact` geçerli veriyle 200/success; boş isim + kısa mesajla 422 doğrulandı.

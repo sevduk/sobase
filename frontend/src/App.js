@@ -22,9 +22,7 @@ const services = [
   { title: "Sosyal Medya Tasarım Sistemleri & Dijital Pazarlama", note: "Kampanya ritmini koruyan modüler içerik sistemleri" },
 ];
 
-const marqueeItems = ["Dijital Çözümler", "Bilişim Altyapısı", "Marka Kimliği", "Web Teknolojileri", "Amblem Tasarımı", "AKGVISION"];
 const heroLines = ["Dijital dünyada", "iz bırakan", "teknolojiler kuruyoruz."];
-
 const ease = [0.22, 1, 0.36, 1];
 const reveal = {
   hidden: { opacity: 0, y: 34 },
@@ -34,9 +32,9 @@ const reveal = {
 function LogoMark({ light = false }) {
   return (
     <svg className="logo-mark" viewBox="0 0 44 44" aria-hidden="true" data-testid="akg-logo-mark">
-      <rect x="3" y="3" width="38" height="38" rx="10" fill={light ? "#f6efe9" : "#151515"} />
-      <path d="M14 31 22 12l8 19h-4.6l-1.6-4.1h-7.4L14.8 31H14Z" fill={light ? "#151515" : "#f6efe9"} />
-      <path d="M17.8 24.2h8.4l1.7 4.4h2.9" fill="none" stroke="#c65b3f" strokeWidth="2.4" strokeLinecap="square" />
+      <rect x="3" y="3" width="38" height="38" rx="10" fill={light ? "#fafafa" : "#111111"} />
+      <path d="M14 31 22 12l8 19h-4.6l-1.6-4.1h-7.4L14.8 31H14Z" fill={light ? "#111111" : "#fafafa"} />
+      <path d="M17.8 24.2h8.4l1.7 4.4h2.9" fill="none" stroke="#4089bc" strokeWidth="2.4" strokeLinecap="square" />
     </svg>
   );
 }
@@ -70,8 +68,7 @@ function App() {
   const heroRef = useRef(null);
   const reduceMotion = useReducedMotion();
   const { scrollYProgress } = useScroll({ target: heroRef, offset: ["start start", "end start"] });
-  const orbY = useTransform(scrollYProgress, [0, 1], [0, reduceMotion ? 0 : 150]);
-  const gridY = useTransform(scrollYProgress, [0, 1], [0, reduceMotion ? 0 : -80]);
+  const gridY = useTransform(scrollYProgress, [0, 1], [0, reduceMotion ? 0 : -70]);
 
   useEffect(() => {
     if (reduceMotion) return undefined;
@@ -141,7 +138,6 @@ function App() {
 
       <section className="hero" id="top" ref={heroRef} data-testid="hero-section">
         <motion.div className="hero-grid" style={{ y: gridY }} aria-hidden="true" />
-        <motion.div className="hero-orb" style={{ y: orbY }} aria-hidden="true" />
         <div className="hero-kicker" data-testid="hero-kicker">
           <span><Sparkles size={13} /> VISION/OS — Dijital Çözüm Sistemi</span>
           <span>İstanbul / 2026</span>
@@ -149,7 +145,7 @@ function App() {
         <h1 data-testid="hero-title">
           {heroLines.map((line, index) => (
             <span className="mask-line" key={line}>
-              <motion.span initial={{ y: "112%" }} animate={{ y: intro ? "112%" : "0%" }} transition={{ duration: 0.9, delay: 0.12 + index * 0.11, ease }} className={index === 1 ? "outline-text" : index === 2 ? "accent-text" : ""}>
+              <motion.span initial={{ y: "112%" }} animate={{ y: intro ? "112%" : "0%" }} transition={{ duration: 0.9, delay: 0.12 + index * 0.11, ease }}>
                 {line}
               </motion.span>
             </span>
@@ -160,12 +156,6 @@ function App() {
           <motion.button onClick={() => scrollTo("projects")} className="circle-arrow" aria-label="Projeleri keşfet" data-testid="hero-projects-button" whileHover={{ y: 5 }} whileTap={{ scale: 0.94 }}><MoveDown size={19} /></motion.button>
         </div>
       </section>
-
-      <div className="marquee" aria-hidden="true" data-testid="editorial-marquee">
-        <div className="marquee-track">
-          {[...marqueeItems, ...marqueeItems].map((item, index) => <span key={`${item}-${index}`}>{item} <i /></span>)}
-        </div>
-      </div>
 
       <section className="logo-showcase" id="logos" data-testid="logo-showcase-section">
         <SectionHeading eyebrow="AKGVISION Seçili Amblemler" index="01" />
@@ -181,7 +171,7 @@ function App() {
       </section>
 
       <section className="projects-section" id="projects" data-testid="projects-section">
-        <SectionHeading eyebrow="Seçilmiş işler" index="02" />
+        <SectionHeading eyebrow="Projeler" index="02" />
         <div className="project-grid">
           {projects.map((project, index) => (
             <motion.article className={`project-card project-${project.span}`} key={project.number} data-testid={`project-card-${project.number}`} variants={reveal} initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-90px" }} custom={index}>
