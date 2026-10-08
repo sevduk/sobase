@@ -1,7 +1,7 @@
 import { useState } from "react";
 import "@/App.css";
 import axios from "axios";
-import { ArrowUpRight, Menu, X, MoveDown, Plus, Instagram } from "lucide-react";
+import { ArrowUpRight, Menu, X, MoveDown, Instagram } from "lucide-react";
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const projects = [
@@ -39,7 +39,7 @@ function App() {
       <div className="hero-bottom"><p>Markanızın özünü; zamansız kurumsal kimlikler, logo, kartvizit ve sosyal medya vizyonuyla geleceğe taşıyoruz.</p><button onClick={() => scrollTo("projects")} className="circle-arrow" aria-label="Projeleri keşfet" data-testid="hero-projects-button"><MoveDown size={19}/></button></div>
     </section>
 
-    <section className="projects-section" id="projects" data-testid="projects-section"><div className="section-heading"><span className="eyebrow">Seçilmiş işler</span><span>( 2021 — 2024 )</span></div><div className="project-grid">{projects.map((project) => <article className={`project-card ${project.className}`} key={project.number} data-testid={`project-card-${project.number}`}><a className="project-image-wrap" href="https://www.behance.net" target="_blank" rel="noreferrer" data-testid={`project-image-link-${project.number}`}><img src={project.image} alt={`${project.name} ${project.type} çalışması`} /><span className="view-project">İncele <ArrowUpRight size={18}/></span></a><div className="project-meta"><div><span className="project-number">{project.number}</span><h2>{project.name} <small>— {project.type}</small></h2><p>{project.disciplines}</p></div><a href="https://www.behance.net" target="_blank" rel="noreferrer" className="behance-link" data-testid={`project-behance-link-${project.number}`}>Behance&apos;te incele <ArrowUpRight size={15}/></a></div></article>)}</div></section>
+    <section className="projects-section" id="projects" data-testid="projects-section"><div className="section-heading"><span className="eyebrow">Seçilmiş işler</span><span>( 2021 — 2024 )</span></div><div className="project-grid">{projects.map((project) => <article className={`project-card ${project.className}`} key={project.number} data-testid={`project-card-${project.number}`}><a className="project-image-wrap" href="https://www.behance.net" target="_blank" rel="noreferrer" data-testid={`project-image-link-${project.number}`}><img src={project.image} alt={`${project.name} ${project.type} çalışması`} /><span className="view-project">İncele <ArrowUpRight size={18}/></span></a><div className="project-meta"><div><span className="project-number">{project.number}</span><h2>{project.name} <small>— {project.type}</small></h2><div className="project-tags" data-testid={`project-tags-${project.number}`}>{project.disciplines.split(", ").map((discipline) => <span key={discipline}>{discipline}</span>)}</div></div><a href="https://www.behance.net" target="_blank" rel="noreferrer" className="behance-link" data-testid={`project-behance-link-${project.number}`}>Behance&apos;te incele <ArrowUpRight size={15}/></a></div></article>)}</div></section>
 
     <section className="behance-ribbon" data-testid="behance-ribbon"><div className="ribbon-mark">A<span>+</span></div><div><span className="eyebrow">Daha fazlasını keşfedin</span><h2>Tüm vaka çalışmalarımız ve süreçlerimiz<br/><em>Behance üzerinde</em> detaylandırılmıştır.</h2></div><a href="https://www.behance.net" target="_blank" rel="noreferrer" className="dark-button" data-testid="behance-profile-button">Profilimizi ziyaret edin <ArrowUpRight size={16}/></a></section>
 
