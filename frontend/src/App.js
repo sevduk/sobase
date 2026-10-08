@@ -6,11 +6,45 @@ import { AnimatePresence, motion, useReducedMotion, useScroll, useTransform } fr
 import { ArrowUpRight, Menu, X, MoveDown, Instagram, Sparkles } from "lucide-react";
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+const FORMA_IMAGE = "https://images.unsplash.com/photo-1790345835845-bda0548978b2?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1ODR8MHwxfHNlYXJjaHw0fHxlZGl0b3JpYWwlMjBkZXNpZ24lMjBtYWdhemluZSUyMGxheW91dCUyMGFyY2hpdGVjdHVyZXxlbnwwfHx8fDE3OTE0NDc1ODd8MA&ixlib=rb-4.1.0&q=85";
 
 const projects = [
-  { number: "01", name: "AURA", type: "Brand Identity", disciplines: "Logo, Kurumsal Kimlik, Kartvizit", image: "https://images.unsplash.com/photo-1760804876161-ba0337e998fe?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDk1NzZ8MHwxfHNlYXJjaHwxfHxtaW5pbWFsaXN0JTIwYnJhbmRpbmclMjBtb2NrdXAlMjBlZGl0b3JpYWwlMjBwb3J0Zm9saW98ZW58MHx8fHwxNzkxNDQ3NTg1fDA&ixlib=rb-4.1.0&q=85", span: "a" },
-  { number: "02", name: "NORTH / 01", type: "Visual Language", disciplines: "Art Direction, Packaging, Digital", image: "https://images.unsplash.com/photo-1775510984733-8748e90a985e?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDk1NzZ8MHwxfHNlYXJjaHwyfHxtaW5pbWFsaXN0JTIwYnJhbmRpbmclMjBtb2NrdXAlMjBlZGl0b3JpYWwlMjBwb3J0Zm9saW98ZW58MHx8fHwxNzkxNDQ3NTg1fDA&ixlib=rb-4.1.0&q=85", span: "b" },
-  { number: "03", name: "NOIRÉ", type: "Brand Identity", disciplines: "Logo, Print, Direction", image: "https://images.unsplash.com/photo-1782857690704-c4341b240487?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDk1NzZ8MHwxfHNlYXJjaHw0fHxtaW5pbWFsaXN0JTIwYnJhbmRpbmclMjBtb2NrdXAlMjBlZGl0b3JpYWwlMjBwb3J0Zm9saW98ZW58MHx8fHwxNzkxNDQ3NTg1fDA&ixlib=rb-4.1.0&q=85", span: "c" },
+  {
+    number: "01",
+    name: "AURA",
+    type: "Logo & Marka Tasarımı",
+    disciplines: "Logo, Kurumsal Kimlik, Kartvizit",
+    image: "https://images.unsplash.com/photo-1760804876161-ba0337e998fe?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDk1NzZ8MHwxfHNlYXJjaHwxfHxtaW5pbWFsaXN0JTIwYnJhbmRpbmclMjBtb2NrdXAlMjBlZGl0b3JpYWwlMjBwb3J0Zm9saW98ZW58MHx8fHwxNzkxNDQ3NTg1fDA&ixlib=rb-4.1.0&q=85",
+    year: "2026",
+    client: "Klinik / Sağlık",
+    summary: "AURA için amaç; güven veren klinik duruşunu sade bir işaret ve uygulanabilir kimlik sistemine dönüştürmekti. Logo, kartvizit ve temel basılı işler tek tipografik disiplinde toplandı; sonuç, tanınırlığı yüksek ve üretimi kolay bir marka çekirdeği oldu.",
+    gallery: ["https://images.unsplash.com/photo-1760804876161-ba0337e998fe?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDk1NzZ8MHwxfHNlYXJjaHwxfHxtaW5pbWFsaXN0JTIwYnJhbmRpbmclMjBtb2NrdXAlMjBlZGl0b3JpYWwlMjBwb3J0Zm9saW98ZW58MHx8fHwxNzkxNDQ3NTg1fDA&ixlib=rb-4.1.0&q=85", FORMA_IMAGE],
+    span: "a",
+  },
+  {
+    number: "02",
+    name: "NORTH / 01",
+    type: "Dijital Çözümler & Web Teknolojileri",
+    disciplines: "Art Direction, Packaging, Digital",
+    image: "https://images.unsplash.com/photo-1775510984733-8748e90a985e?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDk1NzZ8MHwxfHNlYXJjaHwyfHxtaW5pbWFsaXN0JTIwYnJhbmRpbmclMjBtb2NrdXAlMjBlZGl0b3JpYWwlMjBwb3J0Zm9saW98ZW58MHx8fHwxNzkxNDQ3NTg1fDA&ixlib=rb-4.1.0&q=85",
+    year: "2025",
+    client: "Perakende / Yapı",
+    summary: "NORTH / 01'de cephe tipografisi, ambalaj ve dijital temas noktaları aynı gridde buluştu. Çözüm; mekânsal işaretlerden web arayüzüne uzanan tutarlı bir görsel dil kurdu ve kampanya üretim hızını belirgin şekilde artırdı.",
+    gallery: ["https://images.unsplash.com/photo-1775510984733-8748e90a985e?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDk1NzZ8MHwxfHNlYXJjaHwyfHxtaW5pbWFsaXN0JTIwYnJhbmRpbmclMjBtb2NrdXAlMjBlZGl0b3JpYWwlMjBwb3J0Zm9saW98ZW58MHx8fHwxNzkxNDQ3NTg1fDA&ixlib=rb-4.1.0&q=85", FORMA_IMAGE],
+    span: "b",
+  },
+  {
+    number: "03",
+    name: "NOIRÉ",
+    type: "E-Ticaret Danışmanlığı",
+    disciplines: "Logo, Print, Direction",
+    image: "https://images.unsplash.com/photo-1782857690704-c4341b240487?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDk1NzZ8MHwxfHNlYXJjaHw0fHxtaW5pbWFsaXN0JTIwYnJhbmRpbmclMjBtb2NrdXAlMjBlZGl0b3JpYWwlMjBwb3J0Zm9saW98ZW58MHx8fHwxNzkxNDQ3NTg1fDA&ixlib=rb-4.1.0&q=85",
+    year: "2026",
+    client: "Fintech / Operasyon",
+    summary: "NOIRÉ için karanlık premium kimlik; satış operasyonu ve pazaryeri akışlarıyla birlikte ele alındı. Kartvizit, sunum ve dijital satış şablonları aynı sistemde üretilerek ekip içi kullanım hızlandı ve marka algısı tekilleştirildi.",
+    gallery: ["https://images.unsplash.com/photo-1782857690704-c4341b240487?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDk1NzZ8MHwxfHNlYXJjaHw0fHxtaW5pbWFsaXN0JTIwYnJhbmRpbmclMjBtb2NrdXAlMjBlZGl0b3JpYWwlMjBwb3J0Zm9saW98ZW58MHx8fHwxNzkxNDQ3NTg1fDA&ixlib=rb-4.1.0&q=85", FORMA_IMAGE],
+    span: "c",
+  },
 ];
 
 const brandLogos = [
@@ -52,9 +86,36 @@ function SectionHeading({ eyebrow, index, dark = false }) {
   );
 }
 
+function CaseModal({ project, onClose }) {
+  return (
+    <motion.div className="modal-backdrop" data-testid="modal-backdrop" onClick={onClose} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.25 }}>
+      <motion.div className="case-modal" role="dialog" aria-modal="true" aria-label={`${project.name} proje detayı`} data-testid="project-modal" onClick={(event) => event.stopPropagation()} initial={{ opacity: 0, y: 34, scale: 0.97 }} animate={{ opacity: 1, y: 0, scale: 1 }} exit={{ opacity: 0, y: 24, scale: 0.98 }} transition={{ duration: 0.34, ease }}>
+        <button className="modal-close" onClick={onClose} aria-label="Modalı kapat" data-testid="modal-close-button"><X size={18} /></button>
+        <div className="modal-head">
+          <span className="modal-kicker">Vaka Çalışması / {project.number}</span>
+          <h3>{project.name}</h3>
+          <div className="modal-meta" data-testid="modal-meta">
+            <span>{project.type}</span>
+            <span>{project.year}</span>
+            <span>{project.client}</span>
+          </div>
+        </div>
+        <div className="modal-gallery" data-testid="modal-gallery">
+          {project.gallery.map((image, index) => <img key={`${project.number}-${index}`} src={image} alt={`${project.name} sunum görseli ${index + 1}`} />)}
+        </div>
+        <div className="modal-summary">
+          <span>Vaka Özeti</span>
+          <p>{project.summary}</p>
+        </div>
+      </motion.div>
+    </motion.div>
+  );
+}
+
 function App() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [intro, setIntro] = useState(true);
+  const [activeProject, setActiveProject] = useState(null);
   const [form, setForm] = useState({ name: "", email: "", project_type: "", message: "" });
   const [status, setStatus] = useState("");
   const lenisRef = useRef(null);
@@ -77,6 +138,17 @@ function App() {
     const timer = setTimeout(() => setIntro(false), 850);
     return () => clearTimeout(timer);
   }, []);
+
+  useEffect(() => {
+    if (!activeProject) return undefined;
+    const onKey = (event) => { if (event.key === "Escape") setActiveProject(null); };
+    document.addEventListener("keydown", onKey);
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.removeEventListener("keydown", onKey);
+      document.body.style.overflow = "";
+    };
+  }, [activeProject]);
 
   const scrollTo = (id) => {
     setMenuOpen(false);
@@ -123,7 +195,6 @@ function App() {
         <nav className={menuOpen ? "nav-links open" : "nav-links"} data-testid="main-navigation">
           <button onClick={() => scrollTo("about")} data-testid="about-nav-link">Hizmetler</button>
           <button onClick={() => scrollTo("projects")} data-testid="projects-nav-link">Projeler</button>
-          <a href="https://www.behance.net" target="_blank" rel="noreferrer" data-testid="behance-nav-link">Behance <ArrowUpRight size={14} /></a>
           <button onClick={() => scrollTo("contact")} data-testid="contact-nav-link">İletişim</button>
         </nav>
         <button className="menu-toggle" onClick={() => setMenuOpen(!menuOpen)} aria-label="Menüyü aç" data-testid="mobile-menu-button">{menuOpen ? <X /> : <Menu />}</button>
@@ -169,17 +240,17 @@ function App() {
         <div className="project-grid">
           {projects.map((project, index) => (
             <motion.article className={`project-card project-${project.span}`} key={project.number} data-testid={`project-card-${project.number}`} variants={reveal} initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-90px" }} custom={index}>
-              <a className="project-image-wrap" href="https://www.behance.net" target="_blank" rel="noreferrer" data-testid={`project-image-link-${project.number}`} onMouseMove={spotlight}>
+              <button className="project-image-wrap" type="button" onClick={() => setActiveProject(project)} data-testid={`project-open-${project.number}`} onMouseMove={spotlight} aria-label={`${project.name} detaylarını aç`}>
                 <img src={project.image} alt={`${project.name} ${project.type} çalışması`} />
-                <span className="view-project">İncele <ArrowUpRight size={18} /></span>
-              </a>
+                <span className="view-project">Detayları Gör <ArrowUpRight size={18} /></span>
+              </button>
               <div className="project-meta">
                 <div>
                   <span className="project-number">{project.number} / AKGVISION</span>
                   <h2>{project.name} <small>— {project.type}</small></h2>
                   <div className="project-tags" data-testid={`project-tags-${project.number}`}>{project.disciplines.split(", ").map((discipline) => <span key={discipline}>{discipline}</span>)}</div>
                 </div>
-                <a href="https://www.behance.net" target="_blank" rel="noreferrer" className="behance-link" data-testid={`project-behance-link-${project.number}`}>Behance&apos;te incele <ArrowUpRight size={15} /></a>
+                <button type="button" className="behance-link details-link" onClick={() => setActiveProject(project)} data-testid={`project-details-${project.number}`}>Projeyi İncele <ArrowUpRight size={15} /></button>
               </div>
             </motion.article>
           ))}
@@ -198,13 +269,13 @@ function App() {
         </div>
       </section>
 
-      <section className="behance-ribbon" data-testid="behance-ribbon">
+      <section className="behance-ribbon" data-testid="case-ribbon">
         <div className="ribbon-mark"><LogoMark /></div>
         <div>
-          <span className="eyebrow">Daha fazlasını keşfedin</span>
-          <motion.h2 variants={reveal} initial="hidden" whileInView="visible" viewport={{ once: true }}>Tüm vaka çalışmalarımız ve süreçlerimiz <span>Behance üzerinde</span> detaylandırılmıştır.</motion.h2>
+          <span className="eyebrow">Vaka yaklaşımı</span>
+          <motion.h2 variants={reveal} initial="hidden" whileInView="visible" viewport={{ once: true }}>Tüm proje süreçleri artık <span>kart detaylarında</span> görünür.</motion.h2>
         </div>
-        <motion.a href="https://www.behance.net" target="_blank" rel="noreferrer" className="dark-button" data-testid="behance-profile-button" whileHover={{ x: 4 }} whileTap={{ scale: 0.97 }}>Profilimizi ziyaret edin <ArrowUpRight size={16} /></motion.a>
+        <motion.button type="button" className="dark-button" data-testid="case-ribbon-button" whileHover={{ x: 4 }} whileTap={{ scale: 0.97 }} onClick={() => scrollTo("projects")}>Projelere dön <ArrowUpRight size={16} /></motion.button>
       </section>
 
       <section className="contact-section" id="contact" data-testid="contact-section">
@@ -229,9 +300,13 @@ function App() {
       <footer className="site-footer" data-testid="site-footer">
         <div className="footer-brand footer-mini"><LogoMark /><span>akgvision</span></div>
         <div className="footer-contact"><span>İstanbul, Türkiye</span><a href="mailto:hello@akgvision.com" data-testid="footer-email-link">hello@akgvision.com</a></div>
-        <div className="footer-social"><a href="https://www.behance.net" target="_blank" rel="noreferrer" data-testid="footer-behance-link">Behance <ArrowUpRight size={14} /></a><a href="https://instagram.com" target="_blank" rel="noreferrer" data-testid="footer-instagram-link">Instagram <Instagram size={14} /></a></div>
+        <div className="footer-social"><a href="https://instagram.com" target="_blank" rel="noreferrer" data-testid="footer-instagram-link">Instagram <Instagram size={14} /></a></div>
         <span className="copyright">akgvision © 2026</span>
       </footer>
+
+      <AnimatePresence>
+        {activeProject && <CaseModal project={activeProject} onClose={() => setActiveProject(null)} />}
+      </AnimatePresence>
     </main>
   );
 }
