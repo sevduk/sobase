@@ -5,7 +5,7 @@ from motor.motor_asyncio import AsyncIOMotorClient
 import os
 import logging
 from pathlib import Path
-from pydantic import BaseModel, Field, ConfigDict
+from pydantic import BaseModel, Field, ConfigDict, EmailStr, field_validator
 from typing import List
 import uuid
 from datetime import datetime, timezone
@@ -38,10 +38,18 @@ class StatusCheckCreate(BaseModel):
     client_name: str
 
 class ContactInquiry(BaseModel):
-    name: str
-    email: str
-    project_type: str
-    message: str
+    name: str = Field(min_length=2, max_length=120)
+    email: EmailStr
+    project_type: str = Field(min_length=2, max_length=80)
+    message: str = Field(min_length=5, max_length=3000)
+
+    @field_validator("name", "project_type", "message")
+    @classmethod
+    def reject_blank_text(cls, value: str) -> str:
+        cleaned = value.strip()
+        if not cleaned:
+            raise ValueError("Bu alan boş bırakılamaz")
+        return cleaned
 
 class ContactInquiryResponse(BaseModel):
     success: bool

@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="3" time="1.015" timestamp="2026-10-08T08:22:13.324333+00:00" hostname="agent-env-1c649b98-2593-4ff0-8d61-feb8806cb977"><testcase classname="tests.test_contact_api" name="test_contact_submission_returns_success" time="0.191" /><testcase classname="tests.test_contact_api" name="test_contact_submission_rejects_invalid_payload[payload0]" time="0.120"><failure message="assert 200 == 422&#10; +  where 200 = &lt;Response [200]&gt;.status_code">backend/tests/test_contact_api.py:41: in test_contact_submission_rejects_invalid_payload
+    assert response.status_code == 422
+E   assert 200 == 422
+E    +  where 200 = &lt;Response [200]&gt;.status_code</failure></testcase><testcase classname="tests.test_contact_api" name="test_contact_submission_rejects_invalid_payload[payload1]" time="0.169" /></testsuite></testsuites>
