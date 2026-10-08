@@ -18,6 +18,9 @@ Modern, editoryal ve minimalist bir Tasarım & Marka Stüdyosu portfolyo web sit
 - Responsive masaüstü/mobil kontrolleri ve backend regresyon testleri tamamlandı.
 - Güncelleme: Hero alanı kompaktlaştırıldı ve Plus Jakarta Sans ile modernleştirildi; sıcak terracotta accent, hero degrade ve renkli proje pill etiketleri eklendi.
 - Güncelleme: Proje grid'i ilk viewport'ta daha görünür olacak şekilde yukarı çekildi; masaüstü/mobil taşma kontrolleri tekrarlandı.
+- Güncelleme: Projelerden önce 5 markalı amblem vitrini ve hover tepkili 5 maddelik ajans hizmet listesi eklendi.
+- Güncelleme: Tüm arayüz tek Plus Jakarta Sans ailesine geçirildi, italik stiller kaldırıldı ve bölümler daha kompakt hale getirildi.
+- Güncelleme: Logo grid'i masaüstü/tablet/mobil için akışkan sütunlara uyarlandı; mobil son kutu dengesi düzeltildi.
 
 ## Prioritized Backlog
 - P0: Yok.
