@@ -192,7 +192,7 @@ function App() {
       </section>
 
       <section className="behance-ribbon" data-testid="behance-ribbon">
-        <div className="ribbon-mark"><LogoMark light /></div>
+        <div className="ribbon-mark"><LogoMark /></div>
         <div>
           <span className="eyebrow">Daha fazlasını keşfedin</span>
           <motion.h2 variants={reveal} initial="hidden" whileInView="visible" viewport={{ once: true }}>Tüm vaka çalışmalarımız ve süreçlerimiz <span>Behance üzerinde</span> detaylandırılmıştır.</motion.h2>
@@ -220,10 +220,10 @@ function App() {
       </section>
 
       <section className="contact-section" id="contact" data-testid="contact-section">
-        <SectionHeading eyebrow="Birlikte çalışalım" index="04" dark />
+        <SectionHeading eyebrow="Birlikte çalışalım" index="04" />
         <div className="contact-layout">
           <div>
-            <motion.h2 variants={reveal} initial="hidden" whileInView="visible" viewport={{ once: true }}>Bir sonraki dijital projenizi <span>AKGVISION ile hayata geçirin.</span></motion.h2>
+            <motion.h2 variants={reveal} initial="hidden" whileInView="visible" viewport={{ once: true }}>Bir sonraki dijital projenizi <span>akgvision ile hayata geçirin.</span></motion.h2>
             <a href="mailto:hello@akgvision.com" className="email-link" data-testid="email-link">hello@akgvision.com <ArrowUpRight size={16} /></a>
           </div>
           <form onSubmit={submitForm} className="contact-form" data-testid="contact-form">
