@@ -13,7 +13,6 @@ const projects = [
     number: "01",
     name: "AURA",
     type: "Logo & Marka Tasarımı",
-    disciplines: "Logo, Kurumsal Kimlik, Kartvizit",
     image: "https://images.unsplash.com/photo-1760804876161-ba0337e998fe?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDk1NzZ8MHwxfHNlYXJjaHwxfHxtaW5pbWFsaXN0JTIwYnJhbmRpbmclMjBtb2NrdXAlMjBlZGl0b3JpYWwlMjBwb3J0Zm9saW98ZW58MHx8fHwxNzkxNDQ3NTg1fDA&ixlib=rb-4.1.0&q=85",
     year: "2026",
     client: "Klinik / Sağlık",
@@ -25,7 +24,6 @@ const projects = [
     number: "02",
     name: "NORTH / 01",
     type: "Dijital Çözümler & Web Teknolojileri",
-    disciplines: "Art Direction, Packaging, Digital",
     image: "https://images.unsplash.com/photo-1775510984733-8748e90a985e?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDk1NzZ8MHwxfHNlYXJjaHwyfHxtaW5pbWFsaXN0JTIwYnJhbmRpbmclMjBtb2NrdXAlMjBlZGl0b3JpYWwlMjBwb3J0Zm9saW98ZW58MHx8fHwxNzkxNDQ3NTg1fDA&ixlib=rb-4.1.0&q=85",
     year: "2025",
     client: "Perakende / Yapı",
@@ -37,7 +35,6 @@ const projects = [
     number: "03",
     name: "NOIRÉ",
     type: "E-Ticaret Danışmanlığı",
-    disciplines: "Logo, Print, Direction",
     image: "https://images.unsplash.com/photo-1782857690704-c4341b240487?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDk1NzZ8MHwxfHNlYXJjaHw0fHxtaW5pbWFsaXN0JTIwYnJhbmRpbmclMjBtb2NrdXAlMjBlZGl0b3JpYWwlMjBwb3J0Zm9saW98ZW58MHx8fHwxNzkxNDQ3NTg1fDA&ixlib=rb-4.1.0&q=85",
     year: "2026",
     client: "Fintech / Operasyon",
@@ -78,6 +75,32 @@ function LogoMark({ light = false }) {
   );
 }
 
+function HeroMascot() {
+  return (
+    <div className="hero-mascot" data-testid="hero-mascot" aria-hidden="true">
+      <svg viewBox="0 0 220 220" className="mascot-svg">
+        <defs>
+          <radialGradient id="mascotCore" cx="38%" cy="30%" r="75%">
+            <stop offset="0%" stopColor="#ffffff" />
+            <stop offset="42%" stopColor="#4089bc" />
+            <stop offset="100%" stopColor="#c8d440" />
+          </radialGradient>
+          <linearGradient id="mascotChrome" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stopColor="#ffffff" stopOpacity=".95" />
+            <stop offset="48%" stopColor="#9fc6dd" stopOpacity=".55" />
+            <stop offset="100%" stopColor="#111111" stopOpacity=".22" />
+          </linearGradient>
+        </defs>
+        <circle cx="110" cy="110" r="74" fill="url(#mascotCore)" opacity=".92" />
+        <ellipse cx="110" cy="110" rx="96" ry="34" fill="none" stroke="url(#mascotChrome)" strokeWidth="5" transform="rotate(-18 110 110)" />
+        <ellipse cx="110" cy="110" rx="96" ry="34" fill="none" stroke="#111111" strokeOpacity=".12" strokeWidth="1.5" transform="rotate(24 110 110)" />
+        <circle cx="82" cy="72" r="12" fill="#ffffff" opacity=".9" />
+        <circle cx="150" cy="142" r="7" fill="#c8d440" />
+      </svg>
+    </div>
+  );
+}
+
 function SectionHeading({ eyebrow, index, dark = false }) {
   return (
     <motion.div className={dark ? "section-heading dark" : "section-heading"} variants={reveal} initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-80px" }} data-testid={`section-heading-${index}`}>
@@ -92,7 +115,7 @@ function CaseModal({ project, onClose }) {
       <motion.div className="case-modal" role="dialog" aria-modal="true" aria-label={`${project.name} proje detayı`} data-testid="project-modal" onClick={(event) => event.stopPropagation()} initial={{ opacity: 0, y: 34, scale: 0.97 }} animate={{ opacity: 1, y: 0, scale: 1 }} exit={{ opacity: 0, y: 24, scale: 0.98 }} transition={{ duration: 0.34, ease }}>
         <button className="modal-close" onClick={onClose} aria-label="Modalı kapat" data-testid="modal-close-button"><X size={18} /></button>
         <div className="modal-head">
-          <span className="modal-kicker">Vaka Çalışması / {project.number}</span>
+          <span className="modal-kicker">Vaka Çalışması</span>
           <h3>{project.name}</h3>
           <div className="modal-meta" data-testid="modal-meta">
             <span>{project.type}</span>
@@ -120,6 +143,7 @@ function App() {
   const [status, setStatus] = useState("");
   const lenisRef = useRef(null);
   const heroRef = useRef(null);
+  const mascotRef = useRef(null);
   const reduceMotion = useReducedMotion();
   const { scrollYProgress } = useScroll({ target: heroRef, offset: ["start start", "end start"] });
   const gridY = useTransform(scrollYProgress, [0, 1], [0, reduceMotion ? 0 : -46]);
@@ -156,6 +180,17 @@ function App() {
     if (!target) return;
     if (lenisRef.current) lenisRef.current.scrollTo(target, { offset: -76, duration: 1.1 });
     else target.scrollIntoView({ behavior: "smooth" });
+  };
+
+  const heroPointer = (event) => {
+    if (reduceMotion || !mascotRef.current || !heroRef.current) return;
+    const bounds = heroRef.current.getBoundingClientRect();
+    const x = (event.clientX - bounds.left) / bounds.width - 0.5;
+    const y = (event.clientY - bounds.top) / bounds.height - 0.5;
+    mascotRef.current.style.setProperty("--rx", `${y * -10}deg`);
+    mascotRef.current.style.setProperty("--ry", `${x * 14}deg`);
+    mascotRef.current.style.setProperty("--mx", `${x * 18}px`);
+    mascotRef.current.style.setProperty("--my", `${y * 14}px`);
   };
 
   const spotlight = (event) => {
@@ -200,11 +235,12 @@ function App() {
         <button className="menu-toggle" onClick={() => setMenuOpen(!menuOpen)} aria-label="Menüyü aç" data-testid="mobile-menu-button">{menuOpen ? <X /> : <Menu />}</button>
       </header>
 
-      <section className="hero" id="top" ref={heroRef} data-testid="hero-section">
+      <section className="hero" id="top" ref={heroRef} data-testid="hero-section" onMouseMove={heroPointer}>
         <motion.div className="hero-grid" style={{ y: gridY }} aria-hidden="true" />
+        <div ref={mascotRef} className="hero-mascot-parallax"><HeroMascot /></div>
         <div className="hero-kicker" data-testid="hero-kicker">
           <span><Sparkles size={13} /> DİJİTAL ÇÖZÜMLER • TASARIM • BİLİŞİM</span>
-          <span>İstanbul / 2026</span>
+          <span>ANKARA / 2026</span>
         </div>
         <h1 data-testid="hero-title">
           {heroLines.map((line, index) => (
@@ -244,9 +280,8 @@ function App() {
               </button>
               <div className="project-meta">
                 <div>
-                  <span className="project-number">{project.number} / AKGVISION</span>
-                  <h2>{project.name} <small>— {project.type}</small></h2>
-                  <div className="project-tags" data-testid={`project-tags-${project.number}`}>{project.disciplines.split(", ").map((discipline) => <span key={discipline}>{discipline}</span>)}</div>
+                  <h2>{project.name} —</h2>
+                  <p className="project-category">{project.type}</p>
                 </div>
                 <button type="button" className="behance-link details-link" onClick={() => setActiveProject(project)} data-testid={`project-details-${project.number}`}>Projeyi İncele <ArrowUpRight size={15} /></button>
               </div>
@@ -265,15 +300,6 @@ function App() {
             </motion.div>
           ))}
         </div>
-      </section>
-
-      <section className="behance-ribbon" data-testid="case-ribbon">
-        <div className="ribbon-mark"><LogoMark /></div>
-        <div>
-          <span className="eyebrow">Vaka yaklaşımı</span>
-          <motion.h2 variants={reveal} initial="hidden" whileInView="visible" viewport={{ once: true }}>Tüm proje süreçleri artık <span>kart detaylarında</span> görünür.</motion.h2>
-        </div>
-        <motion.button type="button" className="dark-button" data-testid="case-ribbon-button" whileHover={{ x: 4 }} whileTap={{ scale: 0.97 }} onClick={() => scrollTo("projects")}>Projelere dön <ArrowUpRight size={16} /></motion.button>
       </section>
 
       <section className="contact-section" id="contact" data-testid="contact-section">
@@ -297,7 +323,7 @@ function App() {
 
       <footer className="site-footer" data-testid="site-footer">
         <div className="footer-brand footer-mini"><LogoMark /><span>akgvision</span></div>
-        <div className="footer-contact"><span>İstanbul, Türkiye</span><a href="mailto:hello@akgvision.com" data-testid="footer-email-link">hello@akgvision.com</a></div>
+        <div className="footer-contact"><span>Ankara, Türkiye</span><a href="mailto:hello@akgvision.com" data-testid="footer-email-link">hello@akgvision.com</a></div>
         <div className="footer-social"><a href="https://instagram.com" target="_blank" rel="noreferrer" data-testid="footer-instagram-link">Instagram <Instagram size={14} /></a></div>
         <span className="copyright">akgvision © 2026</span>
       </footer>
