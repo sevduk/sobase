@@ -8,7 +8,7 @@ import { ArrowUpRight, Menu, X, MoveDown, Instagram, Sparkles } from "lucide-rea
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const FORMA_IMAGE = "https://images.unsplash.com/photo-1790345835845-bda0548978b2?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1ODR8MHwxfHNlYXJjaHw0fHxlZGl0b3JpYWwlMjBkZXNpZ24lMjBtYWdhemluZSUyMGxheW91dCUyMGFyY2hpdGVjdHVyZXxlbnwwfHx8fDE3OTE0NDc1ODd8MA&ixlib=rb-4.1.0&q=85";
 
-const projects = [
+const fallbackProjects = [
   {
     number: "01",
     name: "AURA",
@@ -139,6 +139,20 @@ function App() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [intro, setIntro] = useState(true);
   const [activeProject, setActiveProject] = useState(null);
+  const [projectList, setProjectList] = useState(fallbackProjects);
+
+  useEffect(() => {
+    axios.get(`${BACKEND_URL}/api/projects`).then(({ data }) => {
+      if (Array.isArray(data) && data.length) {
+        setProjectList(data.map((project, index) => ({
+          ...project,
+          type: project.category,
+          number: String(project.order || index + 1).padStart(2, "0"),
+          span: ["a", "b", "c"][index % 3],
+        })));
+      }
+    }).catch(() => {});
+  }, []);
   const [form, setForm] = useState({ name: "", email: "", project_type: "", message: "" });
   const [status, setStatus] = useState("");
   const lenisRef = useRef(null);
@@ -272,7 +286,7 @@ function App() {
       <section className="projects-section" id="projects" data-testid="projects-section">
         <SectionHeading eyebrow="Projeler" index="02" />
         <div className="project-grid">
-          {projects.map((project, index) => (
+          {projectList.map((project, index) => (
             <motion.article className={`project-card project-${project.span}`} key={project.number} data-testid={`project-card-${project.number}`} variants={reveal} initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-90px" }} custom={index}>
               <button className="project-image-wrap" type="button" onClick={() => setActiveProject(project)} data-testid={`project-open-${project.number}`} onMouseMove={spotlight} aria-label={`${project.name} detaylarını aç`}>
                 <img src={project.image} alt={`${project.name} ${project.type} çalışması`} />
