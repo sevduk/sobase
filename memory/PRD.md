@@ -36,6 +36,7 @@ Modern, editoryal ve minimalist bir stüdyo portfolyosu olarak başlayan ürün,
 - Bu oturum: Tüm site Inter, sans-serif standardına geçirildi; Plus Jakarta kalıntıları temizlendi, italik stil yok, hiyerarşi Inter ağırlıklarıyla korunuyor. Mavi #4089bc ve zest #c8d440 üst-alt bölümler arasında dengelendi; Behance vurgusu zest highlight, iletişimdeki "akgvision" mavi, etiketler mavi/zest dönüşümlü, servis numaraları küçük zest/mavi rozetler halinde düzeltildi.
 - Bu oturum: Kullanıcının yüklediği gerçek amblem dosyaları "AKGVISION Seçili Amblemler" alanına yerleştirildi; placeholder SVG semboller kaldırıldı, AKA CLINIC ve HESAPEVİ logoları kutular içinde ortalı, marka adları altlarında olacak şekilde sergileniyor.
 - Bu oturum: Hero rozeti "DİJİTAL ÇÖZÜMLER • TASARIM • BİLİŞİM" yapıldı; hizmet listesi 6 maddeye çıkarılıp 04 olarak E-Ticaret Danışmanlığı & Operasyon Yönetimi eklendi, iletişim dropdown'ına "E-Ticaret Danışmanlığı" işlendi. Sayfa akışı Hero -> Hizmetler -> Projeler -> Seçili Amblemler -> Behance -> İletişim olarak yeniden sıralandı; amblem kartları #E5E7EB çerçeveli ve hover'da mavi/zest vurgulu kompakt düzene alındı.
+- Bu oturum: Bölüm indeksleri ve yeşil numara kutuları kaldırıldı; Hizmetlerimiz tam genişlik başlık + 3x2 kart gridine dönüştürüldü, "SEÇİLİ LOGOLAR" başlığıyla logo vitrini 4'lü sığabilecek kompakt karta (182x135px) indirildi.
 
 ## Verification Notes
 - Backend: `GET /api/` 200; `POST /api/contact` geçerli veriyle 200/success; boş isim + kısa mesajla 422 doğrulandı.

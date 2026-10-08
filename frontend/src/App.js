@@ -20,7 +20,7 @@ const brandLogos = [
 
 const services = [
   { title: "Dijital Çözümler & Web Teknolojileri", note: "Hızlı, ölçeklenebilir ve ölçülebilir dijital ürünler" },
-  { title: "Amblem & Logo Tasarımı", note: "Akılda kalan, sade ve üretilebilir marka işaretleri" },
+  { title: "Logo & Marka Tasarımı", note: "Akılda kalan, sade ve üretilebilir marka işaretleri" },
   { title: "Bilişim Altyapısı & Sistem Çözümleri", note: "Güvenli mimari, süreç otomasyonu ve sürdürülebilir sistemler" },
   { title: "E-Ticaret Danışmanlığı & Operasyon Yönetimi", note: "Pazaryeri entegrasyonları, satış operasyonları ve büyüme stratejileri" },
   { title: "Kurumsal Kimlik & Marka Rehberi", note: "Tipografi, renk, dil ve uygulama kurallarıyla tutarlı evren" },
@@ -48,7 +48,6 @@ function SectionHeading({ eyebrow, index, dark = false }) {
   return (
     <motion.div className={dark ? "section-heading dark" : "section-heading"} variants={reveal} initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-80px" }} data-testid={`section-heading-${index}`}>
       <span>{eyebrow}</span>
-      <span>( {index} )</span>
     </motion.div>
   );
 }
@@ -153,20 +152,15 @@ function App() {
 
       <section className="about-section" id="about" data-testid="about-section">
         <SectionHeading eyebrow="Hizmetlerimiz" index="01" />
-        <div className="about-layout">
-          <motion.h2 variants={reveal} initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-80px" }}>Dijital fikirleri, <span>etki yaratan sistemlere</span> dönüştürüyoruz.</motion.h2>
-          <div className="about-copy">
-            <motion.p variants={reveal} initial="hidden" whileInView="visible" viewport={{ once: true }} custom={1}>AKGVISION; bilişim, dijital deneyim ve marka kimliğini aynı vizyonda buluşturan teknoloji ve tasarım stüdyosudur.</motion.p>
-            <motion.p variants={reveal} initial="hidden" whileInView="visible" viewport={{ once: true }} custom={2}>İhtiyaca göre ölçeklenen altyapılar, net bir görsel dil ve ölçülebilir dijital çözümler geliştiriyoruz.</motion.p>
-            <div className="discipline-list" data-testid="services-list">
-              {services.map((service, index) => (
-                <motion.div className="service-item" key={service.title} data-testid={`service-item-${index + 1}`} variants={reveal} initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-40px" }} custom={index} whileHover={{ x: 8 }}>
-                  <span><b>0{index + 1}</b> — {service.title}<small>{service.note}</small></span>
-                  <ArrowUpRight size={16} />
-                </motion.div>
-              ))}
-            </div>
-          </div>
+        <motion.h2 className="services-title" variants={reveal} initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-80px" }}>Dijital fikirleri, <span>etki yaratan sistemlere</span> dönüştürüyoruz.</motion.h2>
+        <div className="services-grid" data-testid="services-list">
+          {services.map((service, index) => (
+            <motion.div className="service-card" key={service.title} data-testid={`service-item-${index + 1}`} variants={reveal} initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-40px" }} custom={index} whileHover={{ y: -4 }}>
+              <span className="service-number">0{index + 1}</span>
+              <h3>{service.title}</h3>
+              <p>{service.note}</p>
+            </motion.div>
+          ))}
         </div>
       </section>
 
@@ -193,13 +187,12 @@ function App() {
       </section>
 
       <section className="logo-showcase" id="logos" data-testid="logo-showcase-section">
-        <SectionHeading eyebrow="AKGVISION Seçili Amblemler" index="03" />
+        <SectionHeading eyebrow="SEÇİLİ LOGOLAR" index="03" />
         <div className="logo-grid">
           {brandLogos.map((logo, index) => (
             <motion.div className="logo-tile" key={logo.name} data-testid={`logo-tile-${index + 1}`} variants={reveal} initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-60px" }} custom={index}>
-              <img src={logo.image} alt={`${logo.name} amblemi`} data-testid={`logo-image-${index + 1}`} />
+              <img src={logo.image} alt={`${logo.name} logosu`} data-testid={`logo-image-${index + 1}`} />
               <span className="logo-name">{logo.name}</span>
-              <span className="logo-index">0{index + 1}</span>
             </motion.div>
           ))}
         </div>
@@ -224,7 +217,7 @@ function App() {
           <form onSubmit={submitForm} className="contact-form" data-testid="contact-form">
             <label>Adınız <input required value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} placeholder="Ad Soyad" data-testid="contact-name-input" /></label>
             <label>E-posta <input required type="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} placeholder="ornek@email.com" data-testid="contact-email-input" /></label>
-            <label>Hizmet türü <select required value={form.project_type} onChange={(e) => setForm({ ...form, project_type: e.target.value })} data-testid="contact-project-type-select"><option value="">Seçiniz</option><option>Dijital Çözümler & Web Teknolojileri</option><option>Bilişim Altyapısı & Sistem Çözümleri</option><option>E-Ticaret Danışmanlığı</option><option>Amblem & Logo Tasarımı</option><option>Kurumsal Kimlik & Marka Rehberi</option><option>Sosyal Medya Tasarım Sistemleri</option><option>Diğer</option></select></label>
+            <label>Hizmet türü <select required value={form.project_type} onChange={(e) => setForm({ ...form, project_type: e.target.value })} data-testid="contact-project-type-select"><option value="">Seçiniz</option><option>Dijital Çözümler & Web Teknolojileri</option><option>Bilişim Altyapısı & Sistem Çözümleri</option><option>E-Ticaret Danışmanlığı</option><option>Logo & Marka Tasarımı</option><option>Kurumsal Kimlik & Marka Rehberi</option><option>Sosyal Medya Tasarım Sistemleri</option><option>Diğer</option></select></label>
             <label>Mesajınız <textarea required value={form.message} onChange={(e) => setForm({ ...form, message: e.target.value })} placeholder="Projenizden biraz bahsedin..." data-testid="contact-message-input" /></label>
             <motion.button type="submit" className="submit-button" disabled={status === "sending"} data-testid="contact-submit-button" whileHover={{ y: -2 }} whileTap={{ scale: 0.97 }}>{status === "sending" ? "Gönderiliyor..." : "Mesajı gönder"}<ArrowUpRight size={17} /></motion.button>
             {status === "success" && <p className="form-status success" data-testid="contact-success-message">Mesajınız için teşekkürler. En kısa sürede size döneceğiz.</p>}
