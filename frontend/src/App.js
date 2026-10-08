@@ -54,9 +54,9 @@ const brandLogos = [
 
 const services = [
   { title: "Dijital Çözümler & Web Teknolojileri", note: "Hızlı, ölçeklenebilir ve ölçülebilir dijital ürünler" },
+  { title: "E-Ticaret Danışmanlığı & Operasyon Yönetimi", note: "Pazaryeri entegrasyonları, satış operasyonları ve büyüme stratejileri" },
   { title: "Logo & Marka Tasarımı", note: "Akılda kalan, sade ve üretilebilir marka işaretleri" },
   { title: "Bilişim Altyapısı & Sistem Çözümleri", note: "Güvenli mimari, süreç otomasyonu ve sürdürülebilir sistemler" },
-  { title: "E-Ticaret Danışmanlığı & Operasyon Yönetimi", note: "Pazaryeri entegrasyonları, satış operasyonları ve büyüme stratejileri" },
   { title: "Kurumsal Kimlik & Marka Rehberi", note: "Tipografi, renk, dil ve uygulama kurallarıyla tutarlı evren" },
   { title: "Sosyal Medya Tasarım Sistemleri & Dijital Pazarlama", note: "Kampanya ritmini koruyan modüler içerik sistemleri" },
 ];
@@ -222,12 +222,10 @@ function App() {
       </section>
 
       <section className="about-section" id="about" data-testid="about-section">
-        <SectionHeading eyebrow="Hizmetlerimiz" index="01" />
-        <motion.h2 className="services-title" variants={reveal} initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-80px" }}>Dijital fikirleri, <span>etki yaratan sistemlere</span> dönüştürüyoruz.</motion.h2>
+        <SectionHeading eyebrow="HİZMETLERİMİZ — DİJİTAL VE STRATEJİK UZMANLIKLAR" index="01" />
         <div className="services-grid" data-testid="services-list">
           {services.map((service, index) => (
             <motion.div className="service-card" key={service.title} data-testid={`service-item-${index + 1}`} variants={reveal} initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-40px" }} custom={index} whileHover={{ y: -4 }}>
-              <span className="service-number">0{index + 1}</span>
               <h3>{service.title}</h3>
               <p>{service.note}</p>
             </motion.div>
