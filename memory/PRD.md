@@ -33,6 +33,7 @@ Modern, editoryal ve minimalist bir stüdyo portfolyosu olarak başlayan ürün,
 - Bu oturum: Görsel hiyerarşi sıkılaştırıldı; hero başlığı ~%50 küçültüldü (1366px'te 65.6px), hero yüksekliği 448px'e indirildi ve ilk ekranda amblem vitrini görünür hale getirildi.
 - Bu oturum: Amblem grid'i PNG-uyumlu, daha küçük ve hafif çerçeveli 5'li kompakt yapıya çevrildi; projeler tek satırda 3 kart ve asimetrik oranlarla yeniden kuruldu, footer alanı lowercase "akgvision" ile daraltıldı.
 - Bu oturum: Behance bandı ve iletişim bölümü koyu temadan çıkarılıp #F5F5F7 açık zemine alındı; metinler #111111 yapıldı, form alt çizgileri #E5E5E5'e çekildi, form başlığı "akgvision" lowercase olacak şekilde güncellendi.
+- Bu oturum: Tüm site Inter, sans-serif standardına geçirildi; Plus Jakarta kalıntıları temizlendi, italik stil yok, hiyerarşi Inter ağırlıklarıyla korunuyor. Mavi #4089bc ve zest #c8d440 üst-alt bölümler arasında dengelendi; Behance vurgusu zest highlight, iletişimdeki "akgvision" mavi, etiketler mavi/zest dönüşümlü, servis numaraları küçük zest/mavi rozetler halinde düzeltildi.
 
 ## Verification Notes
 - Backend: `GET /api/` 200; `POST /api/contact` geçerli veriyle 200/success; boş isim + kısa mesajla 422 doğrulandı.
