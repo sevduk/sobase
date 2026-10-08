@@ -13,6 +13,11 @@ const projects = [
   { number: "03", name: "NOIRÉ", type: "Brand Identity", disciplines: "Logo, Print, Direction", image: "https://images.unsplash.com/photo-1782857690704-c4341b240487?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDk1NzZ8MHwxfHNlYXJjaHw0fHxtaW5pbWFsaXN0JTIwYnJhbmRpbmclMjBtb2NrdXAlMjBlZGl0b3JpYWwlMjBwb3J0Zm9saW98ZW58MHx8fHwxNzkxNDQ3NTg1fDA&ixlib=rb-4.1.0&q=85", span: "c" },
 ];
 
+const brandLogos = [
+  { name: "AKA CLINIC", image: "https://customer-assets-wrfwihn1.emergentagent.net/job_creative-portfolio-2012/artifacts/b223f9ace7b9cd89_amblem-1.png.png" },
+  { name: "HESAPEVİ", image: "https://customer-assets-wrfwihn1.emergentagent.net/job_creative-portfolio-2012/artifacts/70b02963c48005a5_amblem-2.png.webp" },
+];
+
 const services = [
   { title: "Dijital Çözümler & Web Teknolojileri", note: "Hızlı, ölçeklenebilir ve ölçülebilir dijital ürünler" },
   { title: "Amblem & Logo Tasarımı", note: "Akılda kalan, sade ve üretilebilir marka işaretleri" },
@@ -36,17 +41,6 @@ function LogoMark({ light = false }) {
       <path d="M17.8 24.2h8.4l1.7 4.4h2.9" fill="none" stroke="#4089bc" strokeWidth="2.4" strokeLinecap="square" />
     </svg>
   );
-}
-
-function Emblem({ index }) {
-  const shapes = [
-    <path key="0" d="M8 24a12 12 0 0 1 24 0v8H8v-8Z" fill="currentColor" />,
-    <path key="1" d="M7 25c5-9 11-9 16 0s11 9 16 0" fill="none" stroke="currentColor" strokeWidth="4" strokeLinecap="square" />,
-    <path key="2" d="m22 5 4.5 12.5L39 22l-12.5 4.5L22 39l-4.5-12.5L5 22l12.5-4.5L22 5Z" fill="currentColor" />,
-    <path key="3" d="M22 7 39 35H5L22 7Z" fill="none" stroke="currentColor" strokeWidth="4" strokeLinejoin="round" />,
-    <path key="4" d="M22 22m-14 0a14 14 0 1 0 28 0 14 14 0 1 0-28 0" fill="none" stroke="currentColor" strokeWidth="4" />,
-  ];
-  return <svg viewBox="0 0 44 44" className="emblem-svg" aria-hidden="true">{shapes[index]}</svg>;
 }
 
 function SectionHeading({ eyebrow, index, dark = false }) {
@@ -159,10 +153,10 @@ function App() {
       <section className="logo-showcase" id="logos" data-testid="logo-showcase-section">
         <SectionHeading eyebrow="AKGVISION Seçili Amblemler" index="01" />
         <div className="logo-grid">
-          {["NOVA", "MORI", "VECTA", "ORBIT", "LUMA"].map((name, index) => (
-            <motion.div className={`logo-tile tone-${index % 3}`} key={name} data-testid={`logo-tile-${index + 1}`} variants={reveal} initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-60px" }} custom={index}>
-              <Emblem index={index} />
-              <span className="logo-name">{name}</span>
+          {brandLogos.map((logo, index) => (
+            <motion.div className="logo-tile" key={logo.name} data-testid={`logo-tile-${index + 1}`} variants={reveal} initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-60px" }} custom={index}>
+              <img src={logo.image} alt={`${logo.name} amblemi`} data-testid={`logo-image-${index + 1}`} />
+              <span className="logo-name">{logo.name}</span>
               <span className="logo-index">0{index + 1}</span>
             </motion.div>
           ))}
