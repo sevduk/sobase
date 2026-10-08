@@ -1,70 +1,262 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import "@/App.css";
 import axios from "axios";
-import { ArrowUpRight, Menu, X, MoveDown, Instagram } from "lucide-react";
+import Lenis from "lenis";
+import { AnimatePresence, motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
+import { ArrowUpRight, Menu, X, MoveDown, Instagram, Sparkles } from "lucide-react";
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+
 const projects = [
-  { number: "01", name: "AURA", type: "Brand Identity", disciplines: "Logo, Kurumsal Kimlik, Kartvizit", image: "https://images.unsplash.com/photo-1760804876161-ba0337e998fe?crop=entropy&cs=srgb&fm=jpg&q=85&w=1400", className: "project-tall" },
-  { number: "02", name: "NORTH / 01", type: "Visual Language", disciplines: "Art Direction, Packaging, Digital", image: "https://images.unsplash.com/photo-1775510984733-8748e90a985e?crop=entropy&cs=srgb&fm=jpg&q=85&w=1400", className: "project-offset" },
-  { number: "03", name: "NOIRÉ", type: "Brand Identity", disciplines: "Logo, Print, Direction", image: "https://images.unsplash.com/photo-1782857690704-c4341b240487?crop=entropy&cs=srgb&fm=jpg&q=85&w=1400", className: "project-offset" },
-  { number: "04", name: "FORMA", type: "Editorial System", disciplines: "Typography, Editorial, Digital", image: "https://images.unsplash.com/photo-1790345835845-bda0548978b2?crop=entropy&cs=srgb&fm=jpg&q=85&w=1400", className: "project-tall" },
+  { number: "01", name: "AURA", type: "Brand Identity", disciplines: "Logo, Kurumsal Kimlik, Kartvizit", image: "https://images.unsplash.com/photo-1760804876161-ba0337e998fe?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDk1NzZ8MHwxfHNlYXJjaHwxfHxtaW5pbWFsaXN0JTIwYnJhbmRpbmclMjBtb2NrdXAlMjBlZGl0b3JpYWwlMjBwb3J0Zm9saW98ZW58MHx8fHwxNzkxNDQ3NTg1fDA&ixlib=rb-4.1.0&q=85", span: "wide" },
+  { number: "02", name: "NORTH / 01", type: "Visual Language", disciplines: "Art Direction, Packaging, Digital", image: "https://images.unsplash.com/photo-1775510984733-8748e90a985e?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDk1NzZ8MHwxfHNlYXJjaHwyfHxtaW5pbWFsaXN0JTIwYnJhbmRpbmclMjBtb2NrdXAlMjBlZGl0b3JpYWwlMjBwb3J0Zm9saW98ZW58MHx8fHwxNzkxNDQ3NTg1fDA&ixlib=rb-4.1.0&q=85", span: "tall" },
+  { number: "03", name: "NOIRÉ", type: "Brand Identity", disciplines: "Logo, Print, Direction", image: "https://images.unsplash.com/photo-1782857690704-c4341b240487?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDk1NzZ8MHwxfHNlYXJjaHw0fHxtaW5pbWFsaXN0JTIwYnJhbmRpbmclMjBtb2NrdXAlMjBlZGl0b3JpYWwlMjBwb3J0Zm9saW98ZW58MHx8fHwxNzkxNDQ3NTg1fDA&ixlib=rb-4.1.0&q=85", span: "tall" },
+  { number: "04", name: "FORMA", type: "Editorial System", disciplines: "Typography, Editorial, Digital", image: "https://images.unsplash.com/photo-1790345835845-bda0548978b2?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1ODR8MHwxfHNlYXJjaHw0fHxlZGl0b3JpYWwlMjBkZXNpZ24lMjBtYWdhemluZSUyMGxheW91dCUyMGFyY2hpdGVjdHVyZXxlbnwwfHx8fDE3OTE0NDc1ODd8MA&ixlib=rb-4.1.0&q=85", span: "wide" },
 ];
-const logoMarks = [
-  { name: "NOVA", symbol: "◐", tone: "light" },
-  { name: "MORI", symbol: "∿", tone: "dark" },
-  { name: "VECTA", symbol: "✦", tone: "sand" },
-  { name: "ORBIT", symbol: "△", tone: "dark" },
-  { name: "LUMA", symbol: "◎", tone: "light" },
-];
+
 const services = [
-  "Marka Stratejisi & Konumlandırma",
-  "Amblem & Logo Tasarımı",
-  "Kurumsal Kimlik & Baskı Materyalleri",
-  "Sosyal Medya Tasarımı & Şablon Sistemleri",
-  "Ambalaj & Konu Odaklı Özel Tasarımlar",
+  { title: "Dijital Çözümler & Web Teknolojileri", note: "Hızlı, ölçeklenebilir ve ölçülebilir dijital ürünler" },
+  { title: "Amblem & Logo Tasarımı", note: "Akılda kalan, sade ve üretilebilir marka işaretleri" },
+  { title: "Bilişim Altyapısı & Sistem Çözümleri", note: "Güvenli mimari, süreç otomasyonu ve sürdürülebilir sistemler" },
+  { title: "Kurumsal Kimlik & Marka Rehberi", note: "Tipografi, renk, dil ve uygulama kurallarıyla tutarlı evren" },
+  { title: "Sosyal Medya Tasarım Sistemleri & Dijital Pazarlama", note: "Kampanya ritmini koruyan modüler içerik sistemleri" },
 ];
+
+const marqueeItems = ["Dijital Çözümler", "Bilişim Altyapısı", "Marka Kimliği", "Web Teknolojileri", "Amblem Tasarımı", "AKGVISION"];
+const heroLines = ["Dijital dünyada", "iz bırakan", "teknolojiler kuruyoruz."];
+
+const ease = [0.22, 1, 0.36, 1];
+const reveal = {
+  hidden: { opacity: 0, y: 34 },
+  visible: (index = 0) => ({ opacity: 1, y: 0, transition: { duration: 0.75, delay: index * 0.07, ease } }),
+};
+
+function LogoMark({ light = false }) {
+  return (
+    <svg className="logo-mark" viewBox="0 0 44 44" aria-hidden="true" data-testid="akg-logo-mark">
+      <rect x="3" y="3" width="38" height="38" rx="10" fill={light ? "#f6efe9" : "#151515"} />
+      <path d="M14 31 22 12l8 19h-4.6l-1.6-4.1h-7.4L14.8 31H14Z" fill={light ? "#151515" : "#f6efe9"} />
+      <path d="M17.8 24.2h8.4l1.7 4.4h2.9" fill="none" stroke="#c65b3f" strokeWidth="2.4" strokeLinecap="square" />
+    </svg>
+  );
+}
+
+function Emblem({ index }) {
+  const shapes = [
+    <path key="0" d="M8 24a12 12 0 0 1 24 0v8H8v-8Z" fill="currentColor" />,
+    <path key="1" d="M7 25c5-9 11-9 16 0s11 9 16 0" fill="none" stroke="currentColor" strokeWidth="4" strokeLinecap="square" />,
+    <path key="2" d="m22 5 4.5 12.5L39 22l-12.5 4.5L22 39l-4.5-12.5L5 22l12.5-4.5L22 5Z" fill="currentColor" />,
+    <path key="3" d="M22 7 39 35H5L22 7Z" fill="none" stroke="currentColor" strokeWidth="4" strokeLinejoin="round" />,
+    <path key="4" d="M22 22m-14 0a14 14 0 1 0 28 0 14 14 0 1 0-28 0" fill="none" stroke="currentColor" strokeWidth="4" />,
+  ];
+  return <svg viewBox="0 0 44 44" className="emblem-svg" aria-hidden="true">{shapes[index]}</svg>;
+}
+
+function SectionHeading({ eyebrow, index, dark = false }) {
+  return (
+    <motion.div className={dark ? "section-heading dark" : "section-heading"} variants={reveal} initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-80px" }} data-testid={`section-heading-${index}`}>
+      <span>{eyebrow}</span>
+      <span>( {index} )</span>
+    </motion.div>
+  );
+}
 
 function App() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [intro, setIntro] = useState(true);
   const [form, setForm] = useState({ name: "", email: "", project_type: "", message: "" });
   const [status, setStatus] = useState("");
-  const scrollTo = (id) => { document.getElementById(id)?.scrollIntoView({ behavior: "smooth" }); setMenuOpen(false); };
-  const submitForm = async (event) => {
-    event.preventDefault(); setStatus("sending");
-    try { await axios.post(`${BACKEND_URL}/api/contact`, form); setStatus("success"); setForm({ name: "", email: "", project_type: "", message: "" }); }
-    catch { setStatus("error"); }
+  const lenisRef = useRef(null);
+  const heroRef = useRef(null);
+  const reduceMotion = useReducedMotion();
+  const { scrollYProgress } = useScroll({ target: heroRef, offset: ["start start", "end start"] });
+  const orbY = useTransform(scrollYProgress, [0, 1], [0, reduceMotion ? 0 : 150]);
+  const gridY = useTransform(scrollYProgress, [0, 1], [0, reduceMotion ? 0 : -80]);
+
+  useEffect(() => {
+    if (reduceMotion) return undefined;
+    const lenis = new Lenis({ lerp: 0.09, smoothWheel: true });
+    lenisRef.current = lenis;
+    let rafId;
+    const raf = (time) => { lenis.raf(time); rafId = requestAnimationFrame(raf); };
+    rafId = requestAnimationFrame(raf);
+    return () => { cancelAnimationFrame(rafId); lenis.destroy(); };
+  }, [reduceMotion]);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setIntro(false), 950);
+    return () => clearTimeout(timer);
+  }, []);
+
+  const scrollTo = (id) => {
+    setMenuOpen(false);
+    const target = document.getElementById(id);
+    if (!target) return;
+    if (lenisRef.current) lenisRef.current.scrollTo(target, { offset: -76, duration: 1.1 });
+    else target.scrollIntoView({ behavior: "smooth" });
   };
-  return <main className="site-shell">
-    <header className="site-header" data-testid="site-header">
-      <button className="wordmark" onClick={() => scrollTo("top")} data-testid="wordmark-button"><span>ATELIER</span><small>DESIGN & BRAND STUDIO</small></button>
-      <nav className={menuOpen ? "nav-links open" : "nav-links"} data-testid="main-navigation">
-        <button onClick={() => scrollTo("projects")} data-testid="projects-nav-link">Projeler</button>
-        <button onClick={() => scrollTo("about")} data-testid="about-nav-link">Hakkımızda</button>
-        <a href="https://www.behance.net" target="_blank" rel="noreferrer" data-testid="behance-nav-link">Behance <ArrowUpRight size={14}/></a>
-        <button onClick={() => scrollTo("contact")} data-testid="contact-nav-link">İletişim</button>
-      </nav>
-      <button className="menu-toggle" onClick={() => setMenuOpen(!menuOpen)} aria-label="Menüyü aç" data-testid="mobile-menu-button">{menuOpen ? <X/> : <Menu/>}</button>
-    </header>
 
-    <section className="hero" id="top" data-testid="hero-section">
-      <div className="hero-kicker"><span className="eyebrow">Bağımsız tasarım stüdyosu</span><span className="hero-index">01 / 05</span></div>
-      <h1>Dönüştüren marka<br/><span className="accent-word">kimlikleri</span> tasarlıyoruz.</h1>
-      <div className="hero-bottom"><p>Markanızın özünü; zamansız kurumsal kimlikler, logo, kartvizit ve sosyal medya vizyonuyla geleceğe taşıyoruz.</p><button onClick={() => scrollTo("projects")} className="circle-arrow" aria-label="Projeleri keşfet" data-testid="hero-projects-button"><MoveDown size={19}/></button></div>
-    </section>
+  const spotlight = (event) => {
+    const bounds = event.currentTarget.getBoundingClientRect();
+    event.currentTarget.style.setProperty("--mx", `${event.clientX - bounds.left}px`);
+    event.currentTarget.style.setProperty("--my", `${event.clientY - bounds.top}px`);
+  };
 
-    <section className="logo-showcase" id="logos" data-testid="logo-showcase-section"><div className="section-heading"><span className="eyebrow">Seçili amblem & logolar</span><span>( 01 )</span></div><div className="logo-grid">{logoMarks.map((logo, index) => <div className={`logo-tile ${logo.tone}`} key={logo.name} data-testid={`logo-tile-${index + 1}`}><span className={`logo-symbol logo-symbol-${index + 1}`}>{logo.symbol}</span><span className="logo-name">{logo.name}</span><span className="logo-index">0{index + 1}</span></div>)}</div></section>
+  const submitForm = async (event) => {
+    event.preventDefault();
+    setStatus("sending");
+    try {
+      await axios.post(`${BACKEND_URL}/api/contact`, form);
+      setStatus("success");
+      setForm({ name: "", email: "", project_type: "", message: "" });
+    } catch {
+      setStatus("error");
+    }
+  };
 
-    <section className="projects-section" id="projects" data-testid="projects-section"><div className="section-heading"><span className="eyebrow">Seçilmiş işler</span><span>( 2021 — 2024 )</span></div><div className="project-grid">{projects.map((project) => <article className={`project-card ${project.className}`} key={project.number} data-testid={`project-card-${project.number}`}><a className="project-image-wrap" href="https://www.behance.net" target="_blank" rel="noreferrer" data-testid={`project-image-link-${project.number}`}><img src={project.image} alt={`${project.name} ${project.type} çalışması`} /><span className="view-project">İncele <ArrowUpRight size={18}/></span></a><div className="project-meta"><div><span className="project-number">{project.number}</span><h2>{project.name} <small>— {project.type}</small></h2><div className="project-tags" data-testid={`project-tags-${project.number}`}>{project.disciplines.split(", ").map((discipline) => <span key={discipline}>{discipline}</span>)}</div></div><a href="https://www.behance.net" target="_blank" rel="noreferrer" className="behance-link" data-testid={`project-behance-link-${project.number}`}>Behance&apos;te incele <ArrowUpRight size={15}/></a></div></article>)}</div></section>
+  return (
+    <main className="site-shell" data-testid="akgvision-site">
+      <AnimatePresence>
+        {intro && (
+          <motion.div className="intro-veil" exit={{ y: "-100%" }} transition={{ duration: 0.72, ease }} data-testid="intro-veil">
+            <LogoMark />
+            <span>AKGVISION</span>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
-    <section className="behance-ribbon" data-testid="behance-ribbon"><div className="ribbon-mark">A<span>+</span></div><div><span className="eyebrow">Daha fazlasını keşfedin</span><h2>Tüm vaka çalışmalarımız ve süreçlerimiz<br/><span className="accent-word">Behance üzerinde</span> detaylandırılmıştır.</h2></div><a href="https://www.behance.net" target="_blank" rel="noreferrer" className="dark-button" data-testid="behance-profile-button">Profilimizi ziyaret edin <ArrowUpRight size={16}/></a></section>
+      <header className="site-header" data-testid="site-header">
+        <button className="wordmark" onClick={() => scrollTo("top")} data-testid="wordmark-button" aria-label="AKGVISION ana sayfa">
+          <LogoMark />
+          <span><b>AKGVISION</b><small>DİJİTAL ÇÖZÜMLER & BİLİŞİM STÜDYOSU</small></span>
+        </button>
+        <nav className={menuOpen ? "nav-links open" : "nav-links"} data-testid="main-navigation">
+          <button onClick={() => scrollTo("projects")} data-testid="projects-nav-link">Projeler</button>
+          <button onClick={() => scrollTo("about")} data-testid="about-nav-link">Hizmetler</button>
+          <a href="https://www.behance.net" target="_blank" rel="noreferrer" data-testid="behance-nav-link">Behance <ArrowUpRight size={14} /></a>
+          <button onClick={() => scrollTo("contact")} data-testid="contact-nav-link">İletişim</button>
+        </nav>
+        <button className="menu-toggle" onClick={() => setMenuOpen(!menuOpen)} aria-label="Menüyü aç" data-testid="mobile-menu-button">{menuOpen ? <X /> : <Menu />}</button>
+      </header>
 
-    <section className="about-section" id="about" data-testid="about-section"><div className="section-heading"><span className="eyebrow">Stüdyo hakkında</span><span>( 03 )</span></div><div className="about-layout"><h2>İyi tasarım,<br/><span className="accent-word">gürültüyü azaltır.</span></h2><div className="about-copy"><p>ATELIER; strateji, kimlik ve dijital deneyimi tek bir düşüncede buluşturan bağımsız bir marka stüdyosudur.</p><p>Her projeye merakla yaklaşır, markaların kendilerine özgü sesini bulmasına yardımcı oluruz. Çünkü bizim için tasarım, güzel görünmekten fazlasıdır.</p><div className="discipline-list" data-testid="services-list">{services.map((service, index) => <div className="service-item" key={service} data-testid={`service-item-${index + 1}`}><span><b>0{index + 1}</b> — {service}</span><ArrowUpRight size={16}/></div>)}</div></div></div></section>
+      <section className="hero" id="top" ref={heroRef} data-testid="hero-section">
+        <motion.div className="hero-grid" style={{ y: gridY }} aria-hidden="true" />
+        <motion.div className="hero-orb" style={{ y: orbY }} aria-hidden="true" />
+        <div className="hero-kicker" data-testid="hero-kicker">
+          <span><Sparkles size={13} /> VISION/OS — Dijital Çözüm Sistemi</span>
+          <span>İstanbul / 2026</span>
+        </div>
+        <h1 data-testid="hero-title">
+          {heroLines.map((line, index) => (
+            <span className="mask-line" key={line}>
+              <motion.span initial={{ y: "112%" }} animate={{ y: intro ? "112%" : "0%" }} transition={{ duration: 0.9, delay: 0.12 + index * 0.11, ease }} className={index === 1 ? "outline-text" : index === 2 ? "accent-text" : ""}>
+                {line}
+              </motion.span>
+            </span>
+          ))}
+        </h1>
+        <div className="hero-bottom">
+          <motion.p variants={reveal} initial="hidden" animate={intro ? "hidden" : "visible"} custom={4} data-testid="hero-copy">AKGVISION; bilişim altyapıları, dijital çözümler ve zamansız kurumsal kimlik vizyonunu tek merkezde buluşturarak markaları geleceğe taşır.</motion.p>
+          <motion.button onClick={() => scrollTo("projects")} className="circle-arrow" aria-label="Projeleri keşfet" data-testid="hero-projects-button" whileHover={{ y: 5 }} whileTap={{ scale: 0.94 }}><MoveDown size={19} /></motion.button>
+        </div>
+      </section>
 
-    <section className="contact-section" id="contact" data-testid="contact-section"><div className="section-heading"><span className="eyebrow">Birlikte çalışalım</span><span>( 04 )</span></div><div className="contact-layout"><div><h2>Bir sonraki büyük<br/><span className="accent-word">projenizi konuşalım.</span></h2><a href="mailto:hello@atelier.studio" className="email-link" data-testid="email-link">hello@atelier.studio <ArrowUpRight size={16}/></a></div><form onSubmit={submitForm} className="contact-form" data-testid="contact-form"><label>Adınız <input required value={form.name} onChange={(e) => setForm({...form, name: e.target.value})} placeholder="Ad Soyad" data-testid="contact-name-input"/></label><label>E-posta <input required type="email" value={form.email} onChange={(e) => setForm({...form, email: e.target.value})} placeholder="ornek@email.com" data-testid="contact-email-input"/></label><label>Proje türü <select required value={form.project_type} onChange={(e) => setForm({...form, project_type: e.target.value})} data-testid="contact-project-type-select"><option value="">Seçiniz</option><option>Kurumsal Kimlik</option><option>Logo Tasarımı</option><option>Sosyal Medya Seti</option><option>Diğer</option></select></label><label>Mesajınız <textarea required value={form.message} onChange={(e) => setForm({...form, message: e.target.value})} placeholder="Projenizden biraz bahsedin..." data-testid="contact-message-input"/></label><button type="submit" className="submit-button" disabled={status === "sending"} data-testid="contact-submit-button">{status === "sending" ? "Gönderiliyor..." : "Mesajı gönder"}<ArrowUpRight size={17}/></button>{status === "success" && <p className="form-status success" data-testid="contact-success-message">Mesajınız için teşekkürler. En kısa sürede size döneceğiz.</p>}{status === "error" && <p className="form-status error" data-testid="contact-error-message">Bir sorun oluştu. Lütfen tekrar deneyin.</p>}</form></div></section>
+      <div className="marquee" aria-hidden="true" data-testid="editorial-marquee">
+        <div className="marquee-track">
+          {[...marqueeItems, ...marqueeItems].map((item, index) => <span key={`${item}-${index}`}>{item} <i /></span>)}
+        </div>
+      </div>
 
-    <footer className="site-footer" data-testid="site-footer"><div className="footer-brand">ATELIER<small>DESIGN & BRAND STUDIO</small></div><div className="footer-contact"><span>İstanbul, Türkiye</span><a href="mailto:hello@atelier.studio" data-testid="footer-email-link">hello@atelier.studio</a></div><div className="footer-social"><a href="https://www.behance.net" target="_blank" rel="noreferrer" data-testid="footer-behance-link">Behance <ArrowUpRight size={14}/></a><a href="https://instagram.com" target="_blank" rel="noreferrer" data-testid="footer-instagram-link">Instagram <Instagram size={14}/></a></div><span className="copyright">© 2024 ATELIER</span></footer>
-  </main>;
+      <section className="logo-showcase" id="logos" data-testid="logo-showcase-section">
+        <SectionHeading eyebrow="AKGVISION Seçili Amblemler" index="01" />
+        <div className="logo-grid">
+          {["NOVA", "MORI", "VECTA", "ORBIT", "LUMA"].map((name, index) => (
+            <motion.div className={`logo-tile tone-${index % 3}`} key={name} data-testid={`logo-tile-${index + 1}`} variants={reveal} initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-60px" }} custom={index}>
+              <Emblem index={index} />
+              <span className="logo-name">{name}</span>
+              <span className="logo-index">0{index + 1}</span>
+            </motion.div>
+          ))}
+        </div>
+      </section>
+
+      <section className="projects-section" id="projects" data-testid="projects-section">
+        <SectionHeading eyebrow="Seçilmiş işler" index="02" />
+        <div className="project-grid">
+          {projects.map((project, index) => (
+            <motion.article className={`project-card project-${project.span}`} key={project.number} data-testid={`project-card-${project.number}`} variants={reveal} initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-90px" }} custom={index}>
+              <a className="project-image-wrap" href="https://www.behance.net" target="_blank" rel="noreferrer" data-testid={`project-image-link-${project.number}`} onMouseMove={spotlight}>
+                <img src={project.image} alt={`${project.name} ${project.type} çalışması`} />
+                <span className="view-project">İncele <ArrowUpRight size={18} /></span>
+              </a>
+              <div className="project-meta">
+                <div>
+                  <span className="project-number">{project.number} / AKGVISION</span>
+                  <h2>{project.name} <small>— {project.type}</small></h2>
+                  <div className="project-tags" data-testid={`project-tags-${project.number}`}>{project.disciplines.split(", ").map((discipline) => <span key={discipline}>{discipline}</span>)}</div>
+                </div>
+                <a href="https://www.behance.net" target="_blank" rel="noreferrer" className="behance-link" data-testid={`project-behance-link-${project.number}`}>Behance&apos;te incele <ArrowUpRight size={15} /></a>
+              </div>
+            </motion.article>
+          ))}
+        </div>
+      </section>
+
+      <section className="behance-ribbon" data-testid="behance-ribbon">
+        <div className="ribbon-mark"><LogoMark light /></div>
+        <div>
+          <span className="eyebrow">Daha fazlasını keşfedin</span>
+          <motion.h2 variants={reveal} initial="hidden" whileInView="visible" viewport={{ once: true }}>Tüm vaka çalışmalarımız ve süreçlerimiz <span>Behance üzerinde</span> detaylandırılmıştır.</motion.h2>
+        </div>
+        <motion.a href="https://www.behance.net" target="_blank" rel="noreferrer" className="dark-button" data-testid="behance-profile-button" whileHover={{ x: 4 }} whileTap={{ scale: 0.97 }}>Profilimizi ziyaret edin <ArrowUpRight size={16} /></motion.a>
+      </section>
+
+      <section className="about-section" id="about" data-testid="about-section">
+        <SectionHeading eyebrow="Hizmetlerimiz" index="03" />
+        <div className="about-layout">
+          <motion.h2 variants={reveal} initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-80px" }}>Dijital fikirleri, <span>etki yaratan sistemlere</span> dönüştürüyoruz.</motion.h2>
+          <div className="about-copy">
+            <motion.p variants={reveal} initial="hidden" whileInView="visible" viewport={{ once: true }} custom={1}>AKGVISION; bilişim, dijital deneyim ve marka kimliğini aynı vizyonda buluşturan teknoloji ve tasarım stüdyosudur.</motion.p>
+            <motion.p variants={reveal} initial="hidden" whileInView="visible" viewport={{ once: true }} custom={2}>İhtiyaca göre ölçeklenen altyapılar, net bir görsel dil ve ölçülebilir dijital çözümler geliştiriyoruz.</motion.p>
+            <div className="discipline-list" data-testid="services-list">
+              {services.map((service, index) => (
+                <motion.div className="service-item" key={service.title} data-testid={`service-item-${index + 1}`} variants={reveal} initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-40px" }} custom={index} whileHover={{ x: 8 }}>
+                  <span><b>0{index + 1}</b> — {service.title}<small>{service.note}</small></span>
+                  <ArrowUpRight size={16} />
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="contact-section" id="contact" data-testid="contact-section">
+        <SectionHeading eyebrow="Birlikte çalışalım" index="04" dark />
+        <div className="contact-layout">
+          <div>
+            <motion.h2 variants={reveal} initial="hidden" whileInView="visible" viewport={{ once: true }}>Bir sonraki dijital projenizi <span>AKGVISION ile hayata geçirin.</span></motion.h2>
+            <a href="mailto:hello@akgvision.com" className="email-link" data-testid="email-link">hello@akgvision.com <ArrowUpRight size={16} /></a>
+          </div>
+          <form onSubmit={submitForm} className="contact-form" data-testid="contact-form">
+            <label>Adınız <input required value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} placeholder="Ad Soyad" data-testid="contact-name-input" /></label>
+            <label>E-posta <input required type="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} placeholder="ornek@email.com" data-testid="contact-email-input" /></label>
+            <label>Hizmet türü <select required value={form.project_type} onChange={(e) => setForm({ ...form, project_type: e.target.value })} data-testid="contact-project-type-select"><option value="">Seçiniz</option><option>Dijital Çözümler & Web Teknolojileri</option><option>Bilişim Altyapısı & Sistem Çözümleri</option><option>Amblem & Logo Tasarımı</option><option>Kurumsal Kimlik & Marka Rehberi</option><option>Sosyal Medya Tasarım Sistemleri</option><option>Diğer</option></select></label>
+            <label>Mesajınız <textarea required value={form.message} onChange={(e) => setForm({ ...form, message: e.target.value })} placeholder="Projenizden biraz bahsedin..." data-testid="contact-message-input" /></label>
+            <motion.button type="submit" className="submit-button" disabled={status === "sending"} data-testid="contact-submit-button" whileHover={{ y: -2 }} whileTap={{ scale: 0.97 }}>{status === "sending" ? "Gönderiliyor..." : "Mesajı gönder"}<ArrowUpRight size={17} /></motion.button>
+            {status === "success" && <p className="form-status success" data-testid="contact-success-message">Mesajınız için teşekkürler. En kısa sürede size döneceğiz.</p>}
+            {status === "error" && <p className="form-status error" data-testid="contact-error-message">Bir sorun oluştu. Lütfen tekrar deneyin.</p>}
+          </form>
+        </div>
+      </section>
+
+      <footer className="site-footer" data-testid="site-footer">
+        <div className="footer-brand"><LogoMark /><span>AKGVISION<small>DİJİTAL ÇÖZÜMLER & BİLİŞİM</small></span></div>
+        <div className="footer-contact"><span>İstanbul, Türkiye</span><a href="mailto:hello@akgvision.com" data-testid="footer-email-link">hello@akgvision.com</a></div>
+        <div className="footer-social"><a href="https://www.behance.net" target="_blank" rel="noreferrer" data-testid="footer-behance-link">Behance <ArrowUpRight size={14} /></a><a href="https://instagram.com" target="_blank" rel="noreferrer" data-testid="footer-instagram-link">Instagram <Instagram size={14} /></a></div>
+        <span className="copyright">AKGVISION © 2026 — Dijital Çözümler & Bilişim</span>
+      </footer>
+    </main>
+  );
 }
 
 export default App;

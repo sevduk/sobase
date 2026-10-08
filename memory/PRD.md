@@ -1,32 +1,46 @@
-# ATELIER — Tasarım & Marka Stüdyosu
+# AKGVISION — Dijital Çözümler & Bilişim Stüdyosu
 
 ## Original Problem Statement
-Modern, editoryal ve minimalist bir Tasarım & Marka Stüdyosu portfolyo web sitesi oluştur. Türkçe içerik, fildişi/kırık beyaz arka plan, kömür siyahı metin, açık gri sınırlar, premium serif başlıklar ve minimalist sans gövde metinleri kullanılmalı; sabit header, hero, asimetrik portfolyo grid'i, Behance bandı, hakkında bölümü, iletişim formu ve footer bulunmalıdır.
+Modern, editoryal ve minimalist bir stüdyo portfolyosu olarak başlayan ürün, son istekle AKGVISION markasına dönüştürüldü: dijital çözümler ve bilişim odağı, kompakt hero, 5 hizmet, 5 amblem vitrini, yüksek çözünürlüklü proje kartları, Behance bağlantıları ve iletişim formu. Tek sans-serif aile (Plus Jakarta Sans), italik yok, terracotta/cobalt vurgular ve responsive akış zorunlu.
+
+## User Personas
+- Marka sahibi / kurucu: Stüdyonun uzmanlığını hızlıca anlamak ve proje başlatmak istiyor.
+- Kurumsal satın alma yetkilisi: Hizmet kapsamını, güven veren işleri ve iletişim kolaylığını tarıyor.
+- Tasarım/teknoloji meraklısı: Amblem sistemi, tipografi ve proje sunumundaki zanaatı inceliyor.
 
 ## Architecture Decisions
-- React tek sayfa arayüzü, React Router gerektirmeden bölüm içi yumuşak kaydırma ile uygulandı.
-- Portfolyo içeriği frontend veri dizisinden, proje görselleri tasarım kılavuzundaki Unsplash varlıklarından geliyor.
-- İletişim formu FastAPI `/api/contact` endpoint'ine gönderiliyor ve MongoDB `contact_inquiries` koleksiyonuna kaydediliyor.
-- API modelinde Pydantic doğrulaması: geçerli e-posta, boş olmayan alanlar, uzunluk sınırları.
+- React tek sayfa; bölüm içi kaydırma Lenis ile yumuşatıldı, scroll-reveal ve mikro etkileşimler framer-motion ile yönetiliyor.
+- Portfolyo ve amblem içeriği frontend veri dizilerinde; proje görselleri tasarım kılavuzundaki küratöryel Unsplash varlıklarından geliyor.
+- İletişim formu FastAPI `/api/contact` endpoint'ine gider ve MongoDB `contact_inquiries` koleksiyonuna kaydedilir.
+- API modeli Pydantic ile e-posta, boş metin ve uzunluk doğrulaması yapar; hatalı istekler 422 döner.
+- Favicon ve header/footer markası aynı özgün SVG AKGVISION işaretini kullanır.
+
+## Core Requirements (Static)
+- Türkçe, tek sans-serif aile, italik tipografi yok.
+- Terracotta (#c65b3f) ve cobalt (#2447f5) vurgular; sıcak kâğıt zemini ve kömür siyahı kontrast.
+- Kompakt ama premium hero; masked line-by-line açılış anı ve hafif parallax/3D hissi.
+- 5 hizmet maddesi, 5 amblem kutusu, 4 proje kartı, Behance CTA, iletişim formu, footer.
+- Tüm etkileşimli ve kritik bilgi öğelerinde benzersiz `data-testid`.
 
 ## Implemented
-- Sabit, responsive header ve mobil açılır menü.
-- Editoryal hero, 4 projeli asimetrik grid, hover derinlik efekti ve Behance bağlantıları.
-- Behance vitrin bandı, stüdyo hakkında/discipline alanı ve iletişim/footer bölümleri.
-- İletişim formu başarı/hata durumları ve API persistence akışı.
-- Kritik kullanıcı arayüzü elemanlarında benzersiz `data-testid` değerleri.
-- Responsive masaüstü/mobil kontrolleri ve backend regresyon testleri tamamlandı.
-- Güncelleme: Hero alanı kompaktlaştırıldı ve Plus Jakarta Sans ile modernleştirildi; sıcak terracotta accent, hero degrade ve renkli proje pill etiketleri eklendi.
-- Güncelleme: Proje grid'i ilk viewport'ta daha görünür olacak şekilde yukarı çekildi; masaüstü/mobil taşma kontrolleri tekrarlandı.
-- Güncelleme: Projelerden önce 5 markalı amblem vitrini ve hover tepkili 5 maddelik ajans hizmet listesi eklendi.
-- Güncelleme: Tüm arayüz tek Plus Jakarta Sans ailesine geçirildi, italik stiller kaldırıldı ve bölümler daha kompakt hale getirildi.
-- Güncelleme: Logo grid'i masaüstü/tablet/mobil için akışkan sütunlara uyarlandı; mobil son kutu dengesi düzeltildi.
+- 2026-07: İlk portfolyo iskeleti, responsive header, asimetrik proje grid'i, iletişim formu ve MongoDB kaydı tamamlandı.
+- 2026-07: Kompakt hero, Plus Jakarta Sans geçişi, terracotta vurgu, 5 amblem vitrini ve 5 hizmet listesi eklendi.
+- 2026-07: Mobil grid dengesi, yatay taşma kontrolleri ve backend Pydantic doğrulaması güçlendirildi.
+- Bu oturum: AKGVISION rebrand doğrulandı; arayüz ödül odaklı "technical editorial" yöne yükseltildi. Kinetik hero açılışı, intro veil, yavaş editoryal marquee, özgün SVG logo/favicon, spotlight'lı ve clip-path'li proje kartları, hizmet hover mikro etkileşimleri, Lenis momentum scroll ve framer-motion section reveal eklendi.
+- Bu oturum: Mobil hero'daki CTA çakışması düzeltildi; 375/768/1366 genişliklerde yatay taşma olmadığı tekrar kontrol edildi.
+
+## Verification Notes
+- Backend: `GET /api/` 200; `POST /api/contact` geçerli veriyle 200/success; boş isim + kısa mesajla 422 doğrulandı.
+- Frontend/e2e: preview açıldı, hero görünür, mobil yatay taşma false, iletişim formu doldurulup gönderildi ve başarı mesajı görüldü.
+- Not: Proje görselleri küratöryel örneklerdir; Behance bağlantıları gerçek profil verilene kadar genel behance.net adresine gider.
 
 ## Prioritized Backlog
 - P0: Yok.
-- P1: Gerçek Behance profil URL'si ve stüdyo iletişim bilgilerinin marka sahibi tarafından güncellenmesi.
-- P2: Proje detay sayfaları ve CMS üzerinden portfolyo içerik yönetimi.
+- P1: Gerçek Behance profil/projeleri ve stüdyo iletişim bilgilerini placeholder'lardan canlı değerlere çevir.
+- P2: Proje detay/vaka sayfaları ve portfolyo içerik yönetimi için hafif CMS akışı.
+- P2: İletişim formu gönderimlerinde e-posta bildirimi.
 
 ## Next Tasks
-- Gerçek proje vaka çalışması içeriklerini ve görsellerini ekle.
-- Form bildirimleri için e-posta gönderim akışı ekle.
+- Gerçek Behance URL'lerini ve proje vaka metinlerini al.
+- Form bildirimi için e-posta entegrasyonunu planla.
+- TR/EN dil geçişi için içerik modelini genişlet.
