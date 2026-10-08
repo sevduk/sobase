@@ -16,6 +16,8 @@ Modern, editoryal ve minimalist bir Tasarım & Marka Stüdyosu portfolyo web sit
 - İletişim formu başarı/hata durumları ve API persistence akışı.
 - Kritik kullanıcı arayüzü elemanlarında benzersiz `data-testid` değerleri.
 - Responsive masaüstü/mobil kontrolleri ve backend regresyon testleri tamamlandı.
+- Güncelleme: Hero alanı kompaktlaştırıldı ve Plus Jakarta Sans ile modernleştirildi; sıcak terracotta accent, hero degrade ve renkli proje pill etiketleri eklendi.
+- Güncelleme: Proje grid'i ilk viewport'ta daha görünür olacak şekilde yukarı çekildi; masaüstü/mobil taşma kontrolleri tekrarlandı.
 
 ## Prioritized Backlog
 - P0: Yok.
