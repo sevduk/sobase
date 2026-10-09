@@ -120,7 +120,7 @@ function CaseModal({ project, onClose }) {
           <div className="modal-meta" data-testid="modal-meta">
             <span>{project.type}</span>
             <span>{project.year}</span>
-            <span>{project.client}</span>
+            {project.client && <span>{project.client}</span>}
           </div>
         </div>
         <div className="modal-gallery" data-testid="modal-gallery">
@@ -140,17 +140,33 @@ function App() {
   const [intro, setIntro] = useState(true);
   const [activeProject, setActiveProject] = useState(null);
   const [projectList, setProjectList] = useState(fallbackProjects);
+  const [servicesList, setServicesList] = useState(services);
+  const [logoList, setLogoList] = useState(brandLogos);
+  const [siteSettings, setSiteSettings] = useState({
+    hero_title: heroLines.join("\n"),
+    hero_copy: "AKGVISION; bilişim altyapıları, dijital çözümler ve zamansız kurumsal kimlik vizyonunu tek merkezde buluşturarak markaları geleceğe taşır.",
+    location: "ANKARA / 2026",
+    email: "hello@akgvision.com",
+  });
 
   useEffect(() => {
-    axios.get(`${BACKEND_URL}/api/projects`).then(({ data }) => {
-      if (Array.isArray(data) && data.length) {
-        setProjectList(data.map((project, index) => ({
+    Promise.all([
+      axios.get(`${BACKEND_URL}/api/projects`),
+      axios.get(`${BACKEND_URL}/api/services`),
+      axios.get(`${BACKEND_URL}/api/logos`),
+      axios.get(`${BACKEND_URL}/api/settings`),
+    ]).then(([projectData, serviceData, logoData, settingsData]) => {
+      if (Array.isArray(projectData.data) && projectData.data.length) {
+        setProjectList(projectData.data.map((project, index) => ({
           ...project,
           type: project.category,
           number: String(project.order || index + 1).padStart(2, "0"),
           span: ["a", "b", "c"][index % 3],
         })));
       }
+      if (Array.isArray(serviceData.data) && serviceData.data.length) setServicesList(serviceData.data);
+      if (Array.isArray(logoData.data) && logoData.data.length) setLogoList(logoData.data);
+      if (settingsData.data) setSiteSettings(settingsData.data);
     }).catch(() => {});
   }, []);
   const [form, setForm] = useState({ name: "", email: "", project_type: "", message: "" });
@@ -225,6 +241,8 @@ function App() {
     }
   };
 
+  const dynamicHeroLines = siteSettings.hero_title.split("\n").map((line) => line.trim()).filter(Boolean);
+
   return (
     <main className="site-shell" data-testid="akgvision-site">
       <AnimatePresence>
@@ -254,10 +272,10 @@ function App() {
         <div ref={mascotRef} className="hero-mascot-parallax"><HeroMascot /></div>
         <div className="hero-kicker" data-testid="hero-kicker">
           <span><Sparkles size={13} /> DİJİTAL ÇÖZÜMLER • TASARIM • BİLİŞİM</span>
-          <span>ANKARA / 2026</span>
+          <span>{siteSettings.location}</span>
         </div>
         <h1 data-testid="hero-title">
-          {heroLines.map((line, index) => (
+          {dynamicHeroLines.map((line, index) => (
             <span className="mask-line" key={line}>
               <motion.span initial={{ y: "112%" }} animate={{ y: intro ? "112%" : "0%" }} transition={{ duration: 0.82, delay: 0.1 + index * 0.09, ease }}>
                 {line}
@@ -266,7 +284,7 @@ function App() {
           ))}
         </h1>
         <div className="hero-bottom">
-          <motion.p variants={reveal} initial="hidden" animate={intro ? "hidden" : "visible"} custom={4} data-testid="hero-copy">AKGVISION; bilişim altyapıları, dijital çözümler ve zamansız kurumsal kimlik vizyonunu tek merkezde buluşturarak markaları geleceğe taşır.</motion.p>
+          <motion.p variants={reveal} initial="hidden" animate={intro ? "hidden" : "visible"} custom={4} data-testid="hero-copy">{siteSettings.hero_copy}</motion.p>
           <motion.button onClick={() => scrollTo("projects")} className="circle-arrow" aria-label="Projeleri keşfet" data-testid="hero-projects-button" whileHover={{ y: 4 }} whileTap={{ scale: 0.94 }}><MoveDown size={17} /></motion.button>
         </div>
       </section>
@@ -274,7 +292,7 @@ function App() {
       <section className="about-section" id="about" data-testid="about-section">
         <SectionHeading eyebrow="HİZMETLERİMİZ — DİJİTAL VE STRATEJİK UZMANLIKLAR" index="01" />
         <div className="services-grid" data-testid="services-list">
-          {services.map((service, index) => (
+          {servicesList.map((service, index) => (
             <motion.div className="service-card" key={service.title} data-testid={`service-item-${index + 1}`} variants={reveal} initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-40px" }} custom={index} whileHover={{ y: -4 }}>
               <h3>{service.title}</h3>
               <p>{service.note}</p>
@@ -307,8 +325,8 @@ function App() {
       <section className="logo-showcase" id="logos" data-testid="logo-showcase-section">
         <SectionHeading eyebrow="SEÇİLİ LOGOLAR" index="03" />
         <div className="logo-grid">
-          {brandLogos.map((logo, index) => (
-            <motion.div className="logo-tile" key={logo.name} data-testid={`logo-tile-${index + 1}`} variants={reveal} initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-60px" }} custom={index}>
+          {logoList.map((logo, index) => (
+            <motion.div className="logo-tile" key={logo.id || logo.name} data-testid={`logo-tile-${index + 1}`} variants={reveal} initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-60px" }} custom={index}>
               <img src={logo.image} alt={`${logo.name} logosu`} data-testid={`logo-image-${index + 1}`} />
               <span className="logo-name">{logo.name}</span>
             </motion.div>
@@ -321,7 +339,7 @@ function App() {
         <div className="contact-layout">
           <div>
             <motion.h2 variants={reveal} initial="hidden" whileInView="visible" viewport={{ once: true }}>Bir sonraki dijital projenizi <span>akgvision ile hayata geçirin.</span></motion.h2>
-            <a href="mailto:hello@akgvision.com" className="email-link" data-testid="email-link">hello@akgvision.com <ArrowUpRight size={16} /></a>
+            <a href={`mailto:${siteSettings.email}`} className="email-link" data-testid="email-link">{siteSettings.email} <ArrowUpRight size={16} /></a>
           </div>
           <form onSubmit={submitForm} className="contact-form" data-testid="contact-form">
             <label>Adınız <input required value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} placeholder="Ad Soyad" data-testid="contact-name-input" /></label>
@@ -337,7 +355,7 @@ function App() {
 
       <footer className="site-footer" data-testid="site-footer">
         <div className="footer-brand footer-mini"><LogoMark /><span>akgvision</span></div>
-        <div className="footer-contact"><span>Ankara, Türkiye</span><a href="mailto:hello@akgvision.com" data-testid="footer-email-link">hello@akgvision.com</a></div>
+        <div className="footer-contact"><span>Ankara, Türkiye</span><a href={`mailto:${siteSettings.email}`} data-testid="footer-email-link">{siteSettings.email}</a></div>
         <div className="footer-social"><a href="https://instagram.com" target="_blank" rel="noreferrer" data-testid="footer-instagram-link">Instagram <Instagram size={14} /></a></div>
         <span className="copyright">akgvision © 2026</span>
       </footer>

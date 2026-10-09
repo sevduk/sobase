@@ -54,15 +54,15 @@ class AdminLogin(BaseModel):
 class ProjectIn(BaseModel):
     name: str = Field(min_length=2, max_length=120)
     category: str = Field(min_length=2, max_length=120)
-    image: str = Field(min_length=8, max_length=1000)
+    image: str = Field(min_length=8, max_length=4_000_000)
     gallery: List[str] = []
-    summary: str = Field(min_length=10, max_length=2000)
+    summary: str = Field(min_length=10, max_length=4000)
     year: str = Field(min_length=4, max_length=12)
-    client: str = Field(min_length=2, max_length=120)
+    client: str = ""
     order: int = 0
     published: bool = True
 
-    @field_validator("name", "category", "summary", "year", "client")
+    @field_validator("name", "category", "summary", "year")
     @classmethod
     def clean_text(cls, value: str) -> str:
         cleaned = value.strip()
@@ -70,14 +70,61 @@ class ProjectIn(BaseModel):
             raise ValueError("Bu alan boş bırakılamaz")
         return cleaned
 
+    @field_validator("client")
+    @classmethod
+    def clean_optional_client(cls, value: str) -> str:
+        return value.strip()
+
 class ProjectOut(ProjectIn):
     id: str
+
+class ServiceIn(BaseModel):
+    title: str = Field(min_length=2, max_length=160)
+    note: str = Field(min_length=2, max_length=400)
+
+class ServicesUpdate(BaseModel):
+    services: List[ServiceIn]
+
+class LogoIn(BaseModel):
+    name: str = Field(min_length=1, max_length=120)
+    image: str = Field(min_length=8, max_length=4_000_000)
+    order: int = 0
+
+class LogoOut(LogoIn):
+    id: str
+
+class SiteSettings(BaseModel):
+    hero_title: str = Field(min_length=3, max_length=500)
+    hero_copy: str = Field(min_length=3, max_length=800)
+    location: str = Field(min_length=2, max_length=80)
+    email: EmailStr
 
 DEFAULT_PROJECTS = [
     {"name": "AURA", "category": "Logo & Marka Tasarımı", "image": "https://images.unsplash.com/photo-1760804876161-ba0337e998fe?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDk1NzZ8MHwxfHNlYXJjaHwxfHxtaW5pbWFsaXN0JTIwYnJhbmRpbmclMjBtb2NrdXAlMjBlZGl0b3JpYWwlMjBwb3J0Zm9saW98ZW58MHx8fHwxNzkxNDQ3NTg1fDA&ixlib=rb-4.1.0&q=85", "gallery": ["https://images.unsplash.com/photo-1760804876161-ba0337e998fe?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDk1NzZ8MHwxfHNlYXJjaHwxfHxtaW5pbWFsaXN0JTIwYnJhbmRpbmclMjBtb2NrdXAlMjBlZGl0b3JpYWwlMjBwb3J0Zm9saW98ZW58MHx8fHwxNzkxNDQ3NTg1fDA&ixlib=rb-4.1.0&q=85"], "summary": "AURA için amaç; güven veren klinik duruşunu sade bir işaret ve uygulanabilir kimlik sistemine dönüştürmekti.", "year": "2026", "client": "Klinik / Sağlık", "order": 1, "published": True},
     {"name": "NORTH / 01", "category": "Dijital Çözümler & Web Teknolojileri", "image": "https://images.unsplash.com/photo-1775510984733-8748e90a985e?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDk1NzZ8MHwxfHNlYXJjaHwyfHxtaW5pbWFsaXN0JTIwYnJhbmRpbmclMjBtb2NrdXAlMjBlZGl0b3JpYWwlMjBwb3J0Zm9saW98ZW58MHx8fHwxNzkxNDQ3NTg1fDA&ixlib=rb-4.1.0&q=85", "gallery": ["https://images.unsplash.com/photo-1775510984733-8748e90a985e?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDk1NzZ8MHwxfHNlYXJjaHwyfHxtaW5pbWFsaXN0JTIwYnJhbmRpbmclMjBtb2NrdXAlMjBlZGl0b3JpYWwlMjBwb3J0Zm9saW98ZW58MHx8fHwxNzkxNDQ3NTg1fDA&ixlib=rb-4.1.0&q=85"], "summary": "NORTH / 01'de cephe tipografisi, ambalaj ve dijital temas noktaları aynı gridde buluştu.", "year": "2025", "client": "Perakende / Yapı", "order": 2, "published": True},
-    {"name": "NOIRÉ", "category": "E-Ticaret Danışmanlığı", "image": "https://images.unsplash.com/photo-1782857690704-c4341b240487?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDk1NzZ8MHwxfHNlYXJjaHw0fHxtaW5pbWFsaXN0JTIwYnJhbmRpbmclMjBtb2NrdXAlMjBlZGl0b3JpYWwlMjBwb3J0Zm9saW98ZW58MHx8fHwxNzkxNDQ3NTg1fDA&ixlib=rb-4.1.0&q=85", "gallery": ["https://images.unsplash.com/photo-1782857690704-c4341b240487?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDk1NzZ8MHwxfHNlYXJjaHw0fHxtaW5pbWFsaXN0JTIwYnJhbmRpbmclMjBtb2NrdXAlMjBlZGl0b3JpYWwlMjBwb3J0Zm9saW98ZW58MHx8fHwxNzkxNDQ3NTg1fDA&ixlib=rb-4.1.0&q=85"], "summary": "NOIRÉ için karanlık premium kimlik; satış operasyonu ve pazaryeri akışlarıyla birlikte ele alındı.", "year": "2026", "client": "Fintech / Operasyon", "order": 3, "published": True},
+    {"name": "NOIRÉ", "category": "E-Ticaret Danışmanlığı", "image": "https://images.unsplash.com/photo-1782857690704-c4341b240487?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDk1NzZ8MHwxfHNlYXJjaHw0fHxtaW5pbWFsaXN0JTIwYnJhbmRpbmclMjBtb2NrdXAlMjBlZGl0b3JpYWwlMjBwb3J0Zm9saW98ZW58MHx8fHwxNzkxNDQ3NTg1fDA&ixlib=rb-4.1.0&q=85", "gallery": ["https://images.unsplash.com/photo-1782857690704-c4341b240487?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDk1NzZ8MHwxfHNlYXJjaHw0fHxtaW5pbWFsaXN0JTIwYnJhbmRpbmclMjBtb2NrdXAlMjBlZGl0b3JpYWwlMjBwb3J0Zm9saW98ZW58MHx8fHwxNzkxNDQ3NTg1fDA&ixlib=rb-4.1.0&q=85"], "summary": "NOIRÉ için karanlık premium kimlik; satış operasyonu ve pazaryeri akışlarıyla birlikte ele alındı.", "year": "2026", "client": "", "order": 3, "published": True},
 ]
+
+DEFAULT_SERVICES = [
+    {"title": "Dijital Çözümler & Web Teknolojileri", "note": "Hızlı, ölçeklenebilir ve ölçülebilir dijital ürünler"},
+    {"title": "E-Ticaret Danışmanlığı & Operasyon Yönetimi", "note": "Pazaryeri entegrasyonları, satış operasyonları ve büyüme stratejileri"},
+    {"title": "Logo & Marka Tasarımı", "note": "Akılda kalan, sade ve üretilebilir marka işaretleri"},
+    {"title": "Bilişim Altyapısı & Sistem Çözümleri", "note": "Güvenli mimari, süreç otomasyonu ve sürdürülebilir sistemler"},
+    {"title": "Kurumsal Kimlik & Marka Rehberi", "note": "Tipografi, renk, dil ve uygulama kurallarıyla tutarlı evren"},
+    {"title": "Sosyal Medya Tasarım Sistemleri & Dijital Pazarlama", "note": "Kampanya ritmini koruyan modüler içerik sistemleri"},
+]
+
+DEFAULT_LOGOS = [
+    {"name": "AKA CLINIC", "image": "https://customer-assets-wrfwihn1.emergentagent.net/job_creative-portfolio-2012/artifacts/b223f9ace7b9cd89_amblem-1.png.png", "order": 1},
+    {"name": "HESAPEVİ", "image": "https://customer-assets-wrfwihn1.emergentagent.net/job_creative-portfolio-2012/artifacts/70b02963c48005a5_amblem-2.png.webp", "order": 2},
+]
+
+DEFAULT_SETTINGS = {
+    "hero_title": "Dijital dünyada\niz bırakan\nteknolojiler kuruyoruz.",
+    "hero_copy": "AKGVISION; bilişim altyapıları, dijital çözümler ve zamansız kurumsal kimlik vizyonunu tek merkezde buluşturarak markaları geleceğe taşır.",
+    "location": "ANKARA / 2026",
+    "email": "hello@akgvision.com",
+}
 
 def create_admin_token() -> str:
     payload = {"sub": "admin", "type": "admin", "exp": datetime.now(timezone.utc) + timedelta(hours=12)}
@@ -128,6 +175,20 @@ async def admin_login(input: AdminLogin, request: Request):
 async def public_projects():
     return await db.projects.find({"published": True}, {"_id": 0}).sort("order", 1).to_list(200)
 
+@api_router.get("/services", response_model=List[ServiceIn])
+async def public_services():
+    doc = await db.site_content.find_one({"id": "services"}, {"_id": 0})
+    return doc["services"]
+
+@api_router.get("/logos", response_model=List[LogoOut])
+async def public_logos():
+    return await db.logos.find({}, {"_id": 0}).sort("order", 1).to_list(100)
+
+@api_router.get("/settings", response_model=SiteSettings)
+async def public_settings():
+    doc = await db.site_content.find_one({"id": "settings"}, {"_id": 0})
+    return doc["settings"]
+
 @api_router.get("/admin/projects", response_model=List[ProjectOut])
 async def admin_projects(_: dict = Depends(get_admin)):
     return await db.projects.find({}, {"_id": 0}).sort("order", 1).to_list(500)
@@ -156,6 +217,35 @@ async def delete_project(project_id: str, _: dict = Depends(get_admin)):
     result = await db.projects.delete_one({"id": project_id})
     if result.deleted_count == 0:
         raise HTTPException(status_code=404, detail="Proje bulunamadı")
+    return {"success": True}
+
+@api_router.put("/admin/services")
+async def update_services(input: ServicesUpdate, _: dict = Depends(get_admin)):
+    await db.site_content.update_one({"id": "services"}, {"$set": {"services": [item.model_dump() for item in input.services]}})
+    return {"success": True}
+
+@api_router.get("/admin/logos", response_model=List[LogoOut])
+async def admin_logos(_: dict = Depends(get_admin)):
+    return await db.logos.find({}, {"_id": 0}).sort("order", 1).to_list(100)
+
+@api_router.post("/admin/logos", response_model=LogoOut)
+async def create_logo(input: LogoIn, _: dict = Depends(get_admin)):
+    doc = input.model_dump()
+    doc["id"] = str(uuid.uuid4())
+    await db.logos.insert_one(doc)
+    doc.pop("_id", None)
+    return LogoOut(**doc)
+
+@api_router.delete("/admin/logos/{logo_id}")
+async def delete_logo(logo_id: str, _: dict = Depends(get_admin)):
+    result = await db.logos.delete_one({"id": logo_id})
+    if result.deleted_count == 0:
+        raise HTTPException(status_code=404, detail="Logo bulunamadı")
+    return {"success": True}
+
+@api_router.put("/admin/settings")
+async def update_settings(input: SiteSettings, _: dict = Depends(get_admin)):
+    await db.site_content.update_one({"id": "settings"}, {"$set": {"settings": input.model_dump()}})
     return {"success": True}
 
 @api_router.post("/status", response_model=StatusCheck)
@@ -191,10 +281,15 @@ logger = logging.getLogger(__name__)
 async def startup_db():
     await db.projects.create_index([("published", 1), ("order", 1)])
     await db.projects.create_index("id", unique=True)
+    await db.logos.create_index("id", unique=True)
     await db.login_attempts.create_index("identifier")
     if await db.projects.count_documents({}) == 0:
         now = datetime.now(timezone.utc).isoformat()
         await db.projects.insert_many([{**project, "id": str(uuid.uuid4()), "created_at": now} for project in DEFAULT_PROJECTS])
+    if await db.logos.count_documents({}) == 0:
+        await db.logos.insert_many([{**logo, "id": str(uuid.uuid4())} for logo in DEFAULT_LOGOS])
+    await db.site_content.update_one({"id": "services"}, {"$setOnInsert": {"services": DEFAULT_SERVICES}}, upsert=True)
+    await db.site_content.update_one({"id": "settings"}, {"$setOnInsert": {"settings": DEFAULT_SETTINGS}}, upsert=True)
 
 @app.on_event("shutdown")
 async def shutdown_db_client():

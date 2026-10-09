@@ -303,3 +303,14 @@ html.lenis, html.lenis body { height:auto; }
   .admin-row { grid-template-columns:56px 1fr; }
   .admin-row button { grid-column:auto; }
 }
+
+.admin-tabs { display:flex; flex-wrap:wrap; gap:8px; margin:0 0 22px; }
+.admin-tabs button { border:1px solid #E5E7EB; background:#fff; color:var(--ink); padding:11px 14px; font:800 10px Inter,sans-serif; letter-spacing:.12em; text-transform:uppercase; cursor:pointer; }
+.admin-tabs button.active { background:var(--blue); border-color:var(--blue); color:#fff; }
+.drop-zone { border:1px dashed rgba(64,137,188,.55); background:rgba(64,137,188,.04); color:var(--blue); padding:18px; text-align:center; font:800 10px Inter,sans-serif; letter-spacing:.1em; text-transform:uppercase; cursor:pointer; }
+.drop-zone:hover { border-color:var(--zest); color:var(--ink); background:rgba(200,212,64,.1); }
+.thumb-preview { width:120px; height:84px; object-fit:cover; border:1px solid #E5E7EB; background:#fff; }
+.thumb-preview.logo { object-fit:contain; padding:10px; height:64px; }
+.thumb-row { display:flex; flex-wrap:wrap; gap:8px; }
+.thumb-row img { width:82px; height:62px; object-fit:cover; border:1px solid #E5E7EB; background:#fff; }
+.admin-grid.two { grid-template-columns:repeat(2,minmax(0,1fr)); }

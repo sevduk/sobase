@@ -3,7 +3,8 @@ import axios from "axios";
 import "@/App.css";
 
 const API = process.env.REACT_APP_BACKEND_URL;
-const emptyForm = { name: "", category: "", image: "", galleryText: "", summary: "", year: "2026", client: "", order: 0, published: true };
+const emptyProject = { name: "", category: "", image: "", galleryText: "", summary: "", year: "2026", client: "", order: 0, published: true };
+const emptyLogo = { name: "", image: "", order: 0 };
 
 function formatError(error) {
   const detail = error.response?.data?.detail;
@@ -12,23 +13,54 @@ function formatError(error) {
   return error.message;
 }
 
+function readFiles(files) {
+  return Promise.all(Array.from(files).map((file) => new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  })));
+}
+
+function DropZone({ label, multiple, onFiles, testid }) {
+  return (
+    <label className="drop-zone" data-testid={testid} onDragOver={(event) => event.preventDefault()} onDrop={(event) => { event.preventDefault(); onFiles(event.dataTransfer.files); }}>
+      {label}
+      <input type="file" accept="image/png,image/jpeg,image/webp" multiple={multiple} onChange={(event) => onFiles(event.target.files)} hidden />
+    </label>
+  );
+}
+
 export default function AdminPage() {
   const [token, setToken] = useState(() => sessionStorage.getItem("akg_admin_token") || "");
   const [password, setPassword] = useState("");
+  const [tab, setTab] = useState("projects");
   const [projects, setProjects] = useState([]);
-  const [form, setForm] = useState(emptyForm);
+  const [services, setServices] = useState([]);
+  const [logos, setLogos] = useState([]);
+  const [settings, setSettings] = useState({ hero_title: "", hero_copy: "", location: "", email: "" });
+  const [projectForm, setProjectForm] = useState(emptyProject);
+  const [logoForm, setLogoForm] = useState(emptyLogo);
   const [editingId, setEditingId] = useState("");
   const [message, setMessage] = useState("");
 
   const headers = { Authorization: `Bearer ${token}` };
 
-  const loadProjects = async () => {
-    const { data } = await axios.get(`${API}/api/admin/projects`, { headers });
-    setProjects(data);
+  const loadAll = async () => {
+    const [projectData, serviceData, logoData, settingsData] = await Promise.all([
+      axios.get(`${API}/api/admin/projects`, { headers }),
+      axios.get(`${API}/api/services`),
+      axios.get(`${API}/api/admin/logos`, { headers }),
+      axios.get(`${API}/api/settings`),
+    ]);
+    setProjects(projectData.data);
+    setServices(serviceData.data);
+    setLogos(logoData.data);
+    setSettings(settingsData.data);
   };
 
   useEffect(() => {
-    if (token) loadProjects().catch(() => setMessage("Oturum doğrulanamadı"));
+    if (token) loadAll().catch((error) => setMessage(formatError(error)));
   }, [token]);
 
   const login = async (event) => {
@@ -44,48 +76,53 @@ export default function AdminPage() {
     }
   };
 
-  const submit = async (event) => {
+  const saveProject = async (event) => {
     event.preventDefault();
     setMessage("");
     const payload = {
-      name: form.name,
-      category: form.category,
-      image: form.image,
-      gallery: form.galleryText.split("\n").map((item) => item.trim()).filter(Boolean),
-      summary: form.summary,
-      year: form.year,
-      client: form.client,
-      order: Number(form.order) || 0,
-      published: form.published,
+      name: projectForm.name,
+      category: projectForm.category,
+      image: projectForm.image,
+      gallery: projectForm.galleryText.split("\n").map((item) => item.trim()).filter(Boolean),
+      summary: projectForm.summary,
+      year: projectForm.year,
+      client: projectForm.client,
+      order: Number(projectForm.order) || 0,
+      published: projectForm.published,
     };
     try {
       if (editingId) await axios.put(`${API}/api/admin/projects/${editingId}`, payload, { headers });
       else await axios.post(`${API}/api/admin/projects`, payload, { headers });
-      setForm(emptyForm);
+      setProjectForm(emptyProject);
       setEditingId("");
-      setMessage("Kaydedildi");
-      await loadProjects();
+      setMessage("Proje kaydedildi");
+      await loadAll();
     } catch (error) {
       setMessage(formatError(error));
     }
   };
 
-  const edit = (project) => {
-    setEditingId(project.id);
-    setForm({ ...project, galleryText: project.gallery.join("\n") });
-    window.scrollTo({ top: 0, behavior: "smooth" });
+  const saveServices = async () => {
+    await axios.put(`${API}/api/admin/services`, { services }, { headers });
+    setMessage("Hizmetler kaydedildi");
   };
 
-  const remove = async (project) => {
-    if (!window.confirm(`${project.name} silinsin mi?`)) return;
-    await axios.delete(`${API}/api/admin/projects/${project.id}`, { headers });
-    await loadProjects();
+  const saveLogo = async (event) => {
+    event.preventDefault();
+    await axios.post(`${API}/api/admin/logos`, { ...logoForm, order: Number(logoForm.order) || 0 }, { headers });
+    setLogoForm(emptyLogo);
+    setMessage("Logo eklendi");
+    await loadAll();
+  };
+
+  const saveSettings = async () => {
+    await axios.put(`${API}/api/admin/settings`, settings, { headers });
+    setMessage("Genel ayarlar kaydedildi");
   };
 
   const logout = () => {
     sessionStorage.removeItem("akg_admin_token");
     setToken("");
-    setProjects([]);
   };
 
   if (!token) {
@@ -107,40 +144,105 @@ export default function AdminPage() {
   return (
     <main className="admin-shell" data-testid="admin-panel">
       <header className="admin-top">
-        <div><span className="admin-kicker">AKGVISION</span><h1>Proje Yönetimi</h1></div>
+        <div><span className="admin-kicker">AKGVISION</span><h1>Yönetim Merkezi</h1></div>
         <button onClick={logout} data-testid="admin-logout-button">Çıkış</button>
       </header>
 
-      <form className="admin-form" onSubmit={submit} data-testid="project-form">
-        <h2>{editingId ? "Projeyi Düzenle" : "Yeni Proje Ekle"}</h2>
-        <div className="admin-grid">
-          <label>Proje Adı<input value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} data-testid="project-name-input" required /></label>
-          <label>Hizmet Kategorisi<input value={form.category} onChange={(e) => setForm({ ...form, category: e.target.value })} data-testid="project-category-input" required /></label>
-          <label>Kapak Görseli URL<input value={form.image} onChange={(e) => setForm({ ...form, image: e.target.value })} data-testid="project-image-input" required /></label>
-          <label>Yıl<input value={form.year} onChange={(e) => setForm({ ...form, year: e.target.value })} data-testid="project-year-input" required /></label>
-          <label>Müşteri / Sektör<input value={form.client} onChange={(e) => setForm({ ...form, client: e.target.value })} data-testid="project-client-input" required /></label>
-          <label>Sıralama<input type="number" value={form.order} onChange={(e) => setForm({ ...form, order: e.target.value })} data-testid="project-order-input" /></label>
-        </div>
-        <label>Galeri / Vaka Görselleri (her satıra bir URL)<textarea value={form.galleryText} onChange={(e) => setForm({ ...form, galleryText: e.target.value })} data-testid="project-gallery-input" /></label>
-        <label>Vaka Açıklaması<textarea value={form.summary} onChange={(e) => setForm({ ...form, summary: e.target.value })} data-testid="project-summary-input" required /></label>
-        <label className="admin-toggle"><input type="checkbox" checked={form.published} onChange={(e) => setForm({ ...form, published: e.target.checked })} data-testid="project-published-toggle" /> Yayında</label>
-        <div className="admin-actions">
-          <button type="submit" data-testid="project-save-button">{editingId ? "Güncelle" : "Ekle"}</button>
-          {editingId && <button type="button" onClick={() => { setEditingId(""); setForm(emptyForm); }} data-testid="project-cancel-button">Vazgeç</button>}
-        </div>
-        {message && <p className="admin-note" data-testid="admin-form-message">{message}</p>}
-      </form>
-
-      <section className="admin-list" data-testid="admin-project-list">
-        {projects.map((project) => (
-          <article key={project.id} className="admin-row" data-testid={`admin-project-${project.id}`}>
-            <img src={project.image} alt="" />
-            <div><b>{project.name}</b><span>{project.category} • {project.year} • {project.published ? "Yayında" : "Taslak"}</span></div>
-            <button onClick={() => edit(project)} data-testid={`edit-${project.id}`}>Düzenle</button>
-            <button className="danger" onClick={() => remove(project)} data-testid={`delete-${project.id}`}>Sil</button>
-          </article>
+      <nav className="admin-tabs" data-testid="admin-tabs">
+        {[["projects", "Projeler"], ["services", "Hizmetler"], ["logos", "Logolar Vitrini"], ["settings", "Genel & Hero Ayarları"]].map(([key, label]) => (
+          <button key={key} className={tab === key ? "active" : ""} onClick={() => setTab(key)} data-testid={`tab-${key}`}>{label}</button>
         ))}
-      </section>
+      </nav>
+      {message && <p className="admin-note" data-testid="admin-message">{message}</p>}
+
+      {tab === "projects" && (
+        <>
+          <form className="admin-form" onSubmit={saveProject} data-testid="project-form">
+            <h2>{editingId ? "Projeyi Düzenle" : "Yeni Proje Ekle"}</h2>
+            <div className="admin-grid">
+              <label>Proje Adı<input value={projectForm.name} onChange={(e) => setProjectForm({ ...projectForm, name: e.target.value })} data-testid="project-name-input" required /></label>
+              <label>Hizmet Kategorisi<input value={projectForm.category} onChange={(e) => setProjectForm({ ...projectForm, category: e.target.value })} data-testid="project-category-input" required /></label>
+              <label>Müşteri / Sektör (opsiyonel)<input value={projectForm.client} onChange={(e) => setProjectForm({ ...projectForm, client: e.target.value })} data-testid="project-client-input" /></label>
+              <label>Yıl<input value={projectForm.year} onChange={(e) => setProjectForm({ ...projectForm, year: e.target.value })} data-testid="project-year-input" required /></label>
+              <label>Sıralama<input type="number" value={projectForm.order} onChange={(e) => setProjectForm({ ...projectForm, order: e.target.value })} data-testid="project-order-input" /></label>
+              <label className="admin-toggle"><input type="checkbox" checked={projectForm.published} onChange={(e) => setProjectForm({ ...projectForm, published: e.target.checked })} data-testid="project-published-toggle" /> Yayında</label>
+            </div>
+            <DropZone label="Bilgisayardan kapak görseli seç veya buraya bırak" onFiles={async (files) => { const [image] = await readFiles(files); setProjectForm({ ...projectForm, image }); }} testid="cover-drop-zone" />
+            <label>Kapak Görseli URL (alternatif)<input value={projectForm.image} onChange={(e) => setProjectForm({ ...projectForm, image: e.target.value })} data-testid="project-image-input" /></label>
+            {projectForm.image && <img className="thumb-preview" src={projectForm.image} alt="Kapak önizleme" data-testid="cover-preview" />}
+            <DropZone label="Galeri görselleri seç / bırak (çoklu)" multiple onFiles={async (files) => { const images = await readFiles(files); setProjectForm({ ...projectForm, galleryText: [...projectForm.galleryText.split("\n").filter(Boolean), ...images].join("\n") }); }} testid="gallery-drop-zone" />
+            <label>Galeri / Vaka Görselleri URL'leri (her satıra bir adet)<textarea value={projectForm.galleryText} onChange={(e) => setProjectForm({ ...projectForm, galleryText: e.target.value })} data-testid="project-gallery-input" /></label>
+            {projectForm.galleryText && <div className="thumb-row" data-testid="gallery-previews">{projectForm.galleryText.split("\n").filter(Boolean).map((image, index) => <img key={index} src={image} alt={`Galeri ${index + 1}`} />)}</div>}
+            <label>Vaka Açıklaması<textarea value={projectForm.summary} onChange={(e) => setProjectForm({ ...projectForm, summary: e.target.value })} data-testid="project-summary-input" required /></label>
+            <div className="admin-actions">
+              <button type="submit" data-testid="project-save-button">{editingId ? "Güncelle" : "Ekle"}</button>
+              {editingId && <button type="button" onClick={() => { setEditingId(""); setProjectForm(emptyProject); }} data-testid="project-cancel-button">Vazgeç</button>}
+            </div>
+          </form>
+          <section className="admin-list" data-testid="admin-project-list">
+            {projects.map((project) => (
+              <article key={project.id} className="admin-row" data-testid={`admin-project-${project.id}`}>
+                <img src={project.image} alt="" />
+                <div><b>{project.name}</b><span>{project.category} • {project.year}{project.client ? ` • ${project.client}` : ""} • {project.published ? "Yayında" : "Taslak"}</span></div>
+                <button onClick={() => { setEditingId(project.id); setProjectForm({ ...project, galleryText: project.gallery.join("\n") }); window.scrollTo({ top: 0, behavior: "smooth" }); }} data-testid={`edit-${project.id}`}>Düzenle</button>
+                <button className="danger" onClick={async () => { if (window.confirm(`${project.name} silinsin mi?`)) { await axios.delete(`${API}/api/admin/projects/${project.id}`, { headers }); await loadAll(); } }} data-testid={`delete-${project.id}`}>Sil</button>
+              </article>
+            ))}
+          </section>
+        </>
+      )}
+
+      {tab === "services" && (
+        <section className="admin-form" data-testid="services-tab">
+          <h2>Hizmet Kartları</h2>
+          {services.map((service, index) => (
+            <div className="admin-grid two" key={index} data-testid={`service-row-${index + 1}`}>
+              <label>Başlık<input value={service.title} onChange={(e) => setServices(services.map((item, i) => i === index ? { ...item, title: e.target.value } : item))} /></label>
+              <label>Kısa Açıklama<input value={service.note} onChange={(e) => setServices(services.map((item, i) => i === index ? { ...item, note: e.target.value } : item))} /></label>
+            </div>
+          ))}
+          <button onClick={saveServices} data-testid="services-save-button">Hizmetleri Kaydet</button>
+        </section>
+      )}
+
+      {tab === "logos" && (
+        <section data-testid="logos-tab">
+          <form className="admin-form" onSubmit={saveLogo}>
+            <h2>Logo Ekle</h2>
+            <div className="admin-grid two">
+              <label>Marka Adı<input value={logoForm.name} onChange={(e) => setLogoForm({ ...logoForm, name: e.target.value })} data-testid="logo-name-input" required /></label>
+              <label>Sıralama<input type="number" value={logoForm.order} onChange={(e) => setLogoForm({ ...logoForm, order: e.target.value })} data-testid="logo-order-input" /></label>
+            </div>
+            <DropZone label="Logo dosyası seç veya bırak" onFiles={async (files) => { const [image] = await readFiles(files); setLogoForm({ ...logoForm, image }); }} testid="logo-drop-zone" />
+            <label>Logo URL (alternatif)<input value={logoForm.image} onChange={(e) => setLogoForm({ ...logoForm, image: e.target.value })} data-testid="logo-url-input" /></label>
+            {logoForm.image && <img className="thumb-preview logo" src={logoForm.image} alt="Logo önizleme" data-testid="logo-preview" />}
+            <button type="submit" data-testid="logo-save-button">Logoyu Ekle</button>
+          </form>
+          <section className="admin-list">
+            {logos.map((logo) => (
+              <article key={logo.id} className="admin-row" data-testid={`admin-logo-${logo.id}`}>
+                <img src={logo.image} alt="" />
+                <div><b>{logo.name}</b><span>Sıra: {logo.order}</span></div>
+                <span />
+                <button className="danger" onClick={async () => { await axios.delete(`${API}/api/admin/logos/${logo.id}`, { headers }); await loadAll(); }} data-testid={`delete-logo-${logo.id}`}>Sil</button>
+              </article>
+            ))}
+          </section>
+        </section>
+      )}
+
+      {tab === "settings" && (
+        <section className="admin-form" data-testid="settings-tab">
+          <h2>Genel & Hero Ayarları</h2>
+          <label>Hero Büyük Başlığı (her satır yeni satır)<textarea value={settings.hero_title} onChange={(e) => setSettings({ ...settings, hero_title: e.target.value })} data-testid="settings-hero-title" /></label>
+          <label>Hero Alt Açıklama<textarea value={settings.hero_copy} onChange={(e) => setSettings({ ...settings, hero_copy: e.target.value })} data-testid="settings-hero-copy" /></label>
+          <div className="admin-grid two">
+            <label>Konum / Yıl<input value={settings.location} onChange={(e) => setSettings({ ...settings, location: e.target.value })} data-testid="settings-location" /></label>
+            <label>İletişim E-postası<input type="email" value={settings.email} onChange={(e) => setSettings({ ...settings, email: e.target.value })} data-testid="settings-email" /></label>
+          </div>
+          <button onClick={saveSettings} data-testid="settings-save-button">Ayarları Kaydet</button>
+        </section>
+      )}
     </main>
   );
 }
