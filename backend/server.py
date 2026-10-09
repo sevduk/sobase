@@ -94,10 +94,21 @@ class LogoOut(LogoIn):
     id: str
 
 class SiteSettings(BaseModel):
-    hero_title: str = Field(min_length=3, max_length=500)
-    hero_copy: str = Field(min_length=3, max_length=800)
-    location: str = Field(min_length=2, max_length=80)
-    email: EmailStr
+    hero_title: str = "Dijital dünyada\niz bırakan\nteknolojiler kuruyoruz."
+    hero_copy: str = ""
+    hero_cta_text: str = "Projeleri keşfet"
+    hero_cta_target: str = "projects"
+    location: str = "ANKARA / 2026"
+    email: EmailStr = "hello@akgvision.com"
+    phone: str = ""
+    address: str = "Ankara, Türkiye"
+    brand_name: str = "AKGVISION"
+    brand_tagline: str = "DİJİTAL ÇÖZÜMLER & BİLİŞİM STÜDYOSU"
+    logo_image: str = ""
+    instagram: str = ""
+    linkedin: str = ""
+    behance: str = ""
+    copyright: str = "akgvision © 2026"
 
 DEFAULT_PROJECTS = [
     {"name": "AURA", "category": "Logo & Marka Tasarımı", "image": "https://images.unsplash.com/photo-1760804876161-ba0337e998fe?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDk1NzZ8MHwxfHNlYXJjaHwxfHxtaW5pbWFsaXN0JTIwYnJhbmRpbmclMjBtb2NrdXAlMjBlZGl0b3JpYWwlMjBwb3J0Zm9saW98ZW58MHx8fHwxNzkxNDQ3NTg1fDA&ixlib=rb-4.1.0&q=85", "gallery": ["https://images.unsplash.com/photo-1760804876161-ba0337e998fe?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDk1NzZ8MHwxfHNlYXJjaHwxfHxtaW5pbWFsaXN0JTIwYnJhbmRpbmclMjBtb2NrdXAlMjBlZGl0b3JpYWwlMjBwb3J0Zm9saW98ZW58MHx8fHwxNzkxNDQ3NTg1fDA&ixlib=rb-4.1.0&q=85"], "summary": "AURA için amaç; güven veren klinik duruşunu sade bir işaret ve uygulanabilir kimlik sistemine dönüştürmekti.", "year": "2026", "client": "Klinik / Sağlık", "order": 1, "published": True},
@@ -122,8 +133,19 @@ DEFAULT_LOGOS = [
 DEFAULT_SETTINGS = {
     "hero_title": "Dijital dünyada\niz bırakan\nteknolojiler kuruyoruz.",
     "hero_copy": "AKGVISION; bilişim altyapıları, dijital çözümler ve zamansız kurumsal kimlik vizyonunu tek merkezde buluşturarak markaları geleceğe taşır.",
+    "hero_cta_text": "Projeleri keşfet",
+    "hero_cta_target": "projects",
     "location": "ANKARA / 2026",
     "email": "hello@akgvision.com",
+    "phone": "",
+    "address": "Ankara, Türkiye",
+    "brand_name": "AKGVISION",
+    "brand_tagline": "DİJİTAL ÇÖZÜMLER & BİLİŞİM STÜDYOSU",
+    "logo_image": "",
+    "instagram": "https://instagram.com",
+    "linkedin": "",
+    "behance": "",
+    "copyright": "akgvision © 2026",
 }
 
 def create_admin_token() -> str:

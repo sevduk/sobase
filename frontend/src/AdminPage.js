@@ -38,7 +38,7 @@ export default function AdminPage() {
   const [projects, setProjects] = useState([]);
   const [services, setServices] = useState([]);
   const [logos, setLogos] = useState([]);
-  const [settings, setSettings] = useState({ hero_title: "", hero_copy: "", location: "", email: "" });
+  const [settings, setSettings] = useState({ hero_title: "", hero_copy: "", hero_cta_text: "Projeleri keşfet", hero_cta_target: "projects", location: "", email: "", phone: "", address: "", brand_name: "AKGVISION", brand_tagline: "DİJİTAL ÇÖZÜMLER & BİLİŞİM STÜDYOSU", logo_image: "", instagram: "", linkedin: "", behance: "", copyright: "" });
   const [projectForm, setProjectForm] = useState(emptyProject);
   const [logoForm, setLogoForm] = useState(emptyLogo);
   const [editingId, setEditingId] = useState("");
@@ -172,7 +172,7 @@ export default function AdminPage() {
             {projectForm.image && <img className="thumb-preview" src={projectForm.image} alt="Kapak önizleme" data-testid="cover-preview" />}
             <DropZone label="Galeri görselleri seç / bırak (çoklu)" multiple onFiles={async (files) => { const images = await readFiles(files); setProjectForm({ ...projectForm, galleryText: [...projectForm.galleryText.split("\n").filter(Boolean), ...images].join("\n") }); }} testid="gallery-drop-zone" />
             <label>Galeri / Vaka Görselleri URL'leri (her satıra bir adet)<textarea value={projectForm.galleryText} onChange={(e) => setProjectForm({ ...projectForm, galleryText: e.target.value })} data-testid="project-gallery-input" /></label>
-            {projectForm.galleryText && <div className="thumb-row" data-testid="gallery-previews">{projectForm.galleryText.split("\n").filter(Boolean).map((image, index) => <img key={index} src={image} alt={`Galeri ${index + 1}`} />)}</div>}
+            {projectForm.galleryText && <div className="thumb-row" data-testid="gallery-previews">{projectForm.galleryText.split("\n").filter(Boolean).map((image, index) => <span className="thumb-item" key={index}><img src={image} alt={`Galeri ${index + 1}`} /><button type="button" aria-label="Görseli kaldır" onClick={() => setProjectForm({ ...projectForm, galleryText: projectForm.galleryText.split("\n").filter(Boolean).filter((_, i) => i !== index).join("\n") })}>×</button></span>)}</div>}
             <label>Vaka Açıklaması<textarea value={projectForm.summary} onChange={(e) => setProjectForm({ ...projectForm, summary: e.target.value })} data-testid="project-summary-input" required /></label>
             <div className="admin-actions">
               <button type="submit" data-testid="project-save-button">{editingId ? "Güncelle" : "Ekle"}</button>
@@ -234,13 +234,35 @@ export default function AdminPage() {
       {tab === "settings" && (
         <section className="admin-form" data-testid="settings-tab">
           <h2>Genel & Hero Ayarları</h2>
+          <DropZone label="Marka logosu seç veya bırak" onFiles={async (files) => { const [image] = await readFiles(files); setSettings({ ...settings, logo_image: image }); }} testid="brand-logo-drop-zone" />
+          {settings.logo_image && <img className="thumb-preview logo" src={settings.logo_image} alt="Marka logosu önizleme" data-testid="brand-logo-preview" />}
+          <div className="admin-grid two">
+            <label>Marka Adı<input value={settings.brand_name} onChange={(e) => setSettings({ ...settings, brand_name: e.target.value })} data-testid="settings-brand-name" /></label>
+            <label>Alt Slogan<input value={settings.brand_tagline} onChange={(e) => setSettings({ ...settings, brand_tagline: e.target.value })} data-testid="settings-brand-tagline" /></label>
+          </div>
           <label>Hero Büyük Başlığı (her satır yeni satır)<textarea value={settings.hero_title} onChange={(e) => setSettings({ ...settings, hero_title: e.target.value })} data-testid="settings-hero-title" /></label>
           <label>Hero Alt Açıklama<textarea value={settings.hero_copy} onChange={(e) => setSettings({ ...settings, hero_copy: e.target.value })} data-testid="settings-hero-copy" /></label>
+          <div className="admin-grid two">
+            <label>CTA Buton Metni<input value={settings.hero_cta_text} onChange={(e) => setSettings({ ...settings, hero_cta_text: e.target.value })} data-testid="settings-cta-text" /></label>
+            <label>CTA Hedef ID<input value={settings.hero_cta_target} onChange={(e) => setSettings({ ...settings, hero_cta_target: e.target.value })} data-testid="settings-cta-target" /></label>
+          </div>
           <div className="admin-grid two">
             <label>Konum / Yıl<input value={settings.location} onChange={(e) => setSettings({ ...settings, location: e.target.value })} data-testid="settings-location" /></label>
             <label>İletişim E-postası<input type="email" value={settings.email} onChange={(e) => setSettings({ ...settings, email: e.target.value })} data-testid="settings-email" /></label>
           </div>
-          <button onClick={saveSettings} data-testid="settings-save-button">Ayarları Kaydet</button>
+          <div className="admin-grid two">
+            <label>Telefon<input value={settings.phone} onChange={(e) => setSettings({ ...settings, phone: e.target.value })} data-testid="settings-phone" /></label>
+            <label>Adres<input value={settings.address} onChange={(e) => setSettings({ ...settings, address: e.target.value })} data-testid="settings-address" /></label>
+          </div>
+          <div className="admin-grid two">
+            <label>Instagram URL<input value={settings.instagram} onChange={(e) => setSettings({ ...settings, instagram: e.target.value })} data-testid="settings-instagram" /></label>
+            <label>LinkedIn URL<input value={settings.linkedin} onChange={(e) => setSettings({ ...settings, linkedin: e.target.value })} data-testid="settings-linkedin" /></label>
+          </div>
+          <div className="admin-grid two">
+            <label>Behance URL<input value={settings.behance} onChange={(e) => setSettings({ ...settings, behance: e.target.value })} data-testid="settings-behance" /></label>
+            <label>Telif Metni<input value={settings.copyright} onChange={(e) => setSettings({ ...settings, copyright: e.target.value })} data-testid="settings-copyright" /></label>
+          </div>
+          <button type="button" onClick={saveSettings} data-testid="settings-save-button">Ayarları Kaydet</button>
         </section>
       )}
     </main>

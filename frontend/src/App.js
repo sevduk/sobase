@@ -3,7 +3,7 @@ import "@/App.css";
 import axios from "axios";
 import Lenis from "lenis";
 import { AnimatePresence, motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
-import { ArrowUpRight, Menu, X, MoveDown, Instagram, Sparkles } from "lucide-react";
+import { ArrowUpRight, Menu, X, MoveDown, Instagram, Linkedin, Sparkles } from "lucide-react";
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const FORMA_IMAGE = "https://images.unsplash.com/photo-1790345835845-bda0548978b2?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1ODR8MHwxfHNlYXJjaHw0fHxlZGl0b3JpYWwlMjBkZXNpZ24lMjBtYWdhemluZSUyMGxheW91dCUyMGFyY2hpdGVjdHVyZXxlbnwwfHx8fDE3OTE0NDc1ODd8MA&ixlib=rb-4.1.0&q=85";
@@ -73,6 +73,11 @@ function LogoMark({ light = false }) {
       <path d="M17.8 24.2h8.4l1.7 4.4h2.9" fill="none" stroke="#4089bc" strokeWidth="2.4" strokeLinecap="square" />
     </svg>
   );
+}
+
+function BrandMark({ image, light = false }) {
+  if (image) return <img className="logo-mark uploaded-logo" src={image} alt="Marka logosu" data-testid="brand-logo-image" />;
+  return <LogoMark light={light} />;
 }
 
 function HeroMascot() {
@@ -166,7 +171,7 @@ function App() {
       }
       if (Array.isArray(serviceData.data) && serviceData.data.length) setServicesList(serviceData.data);
       if (Array.isArray(logoData.data) && logoData.data.length) setLogoList(logoData.data);
-      if (settingsData.data) setSiteSettings(settingsData.data);
+      if (settingsData.data) setSiteSettings((current) => ({ ...current, ...settingsData.data }));
     }).catch(() => {});
   }, []);
   const [form, setForm] = useState({ name: "", email: "", project_type: "", message: "" });
@@ -256,8 +261,8 @@ function App() {
 
       <header className="site-header" data-testid="site-header">
         <button className="wordmark" onClick={() => scrollTo("top")} data-testid="wordmark-button" aria-label="AKGVISION ana sayfa">
-          <LogoMark />
-          <span><b>AKGVISION</b><small>DİJİTAL ÇÖZÜMLER & BİLİŞİM STÜDYOSU</small></span>
+          <BrandMark image={siteSettings.logo_image} />
+          <span><b>{siteSettings.brand_name}</b><small>{siteSettings.brand_tagline}</small></span>
         </button>
         <nav className={menuOpen ? "nav-links open" : "nav-links"} data-testid="main-navigation">
           <button onClick={() => scrollTo("about")} data-testid="about-nav-link">Hizmetler</button>
@@ -285,7 +290,7 @@ function App() {
         </h1>
         <div className="hero-bottom">
           <motion.p variants={reveal} initial="hidden" animate={intro ? "hidden" : "visible"} custom={4} data-testid="hero-copy">{siteSettings.hero_copy}</motion.p>
-          <motion.button onClick={() => scrollTo("projects")} className="circle-arrow" aria-label="Projeleri keşfet" data-testid="hero-projects-button" whileHover={{ y: 4 }} whileTap={{ scale: 0.94 }}><MoveDown size={17} /></motion.button>
+          <motion.button onClick={() => scrollTo(siteSettings.hero_cta_target || "projects")} className="circle-arrow" aria-label={siteSettings.hero_cta_text} data-testid="hero-projects-button" whileHover={{ y: 4 }} whileTap={{ scale: 0.94 }}><MoveDown size={17} /></motion.button><span className="hero-cta-text">{siteSettings.hero_cta_text}</span>
         </div>
       </section>
 
@@ -354,10 +359,10 @@ function App() {
       </section>
 
       <footer className="site-footer" data-testid="site-footer">
-        <div className="footer-brand footer-mini"><LogoMark /><span>akgvision</span></div>
-        <div className="footer-contact"><span>Ankara, Türkiye</span><a href={`mailto:${siteSettings.email}`} data-testid="footer-email-link">{siteSettings.email}</a></div>
-        <div className="footer-social"><a href="https://instagram.com" target="_blank" rel="noreferrer" data-testid="footer-instagram-link">Instagram <Instagram size={14} /></a></div>
-        <span className="copyright">akgvision © 2026</span>
+        <div className="footer-brand footer-mini"><BrandMark image={siteSettings.logo_image} /><span>{(siteSettings.brand_name || "akgvision").toLowerCase()}</span></div>
+        <div className="footer-contact"><span>{siteSettings.address}</span>{siteSettings.phone && <span>{siteSettings.phone}</span>}<a href={`mailto:${siteSettings.email}`} data-testid="footer-email-link">{siteSettings.email}</a></div>
+        <div className="footer-social">{siteSettings.instagram && <a href={siteSettings.instagram} target="_blank" rel="noreferrer" data-testid="footer-instagram-link">Instagram <Instagram size={14} /></a>}{siteSettings.linkedin && <a href={siteSettings.linkedin} target="_blank" rel="noreferrer" data-testid="footer-linkedin-link">LinkedIn <Linkedin size={14} /></a>}{siteSettings.behance && <a href={siteSettings.behance} target="_blank" rel="noreferrer" data-testid="footer-behance-link">Behance <ArrowUpRight size={14} /></a>}</div>
+        <span className="copyright">{siteSettings.copyright}</span>
       </footer>
 
       <AnimatePresence>
